@@ -877,9 +877,8 @@
       </div>
 
       <form id="waitlistForm" class="space-y-3 sm:space-y-4 relative z-10">
-        <input type="hidden" name="access_key" value="eb72d731-d8d7-4c76-85fd-5a52057b174d"/>
-        <input type="hidden" name="subject" value="New Early Supporter — zG Era Movement!"/>
-        <input type="hidden" name="from_name" value="zG Era Waitlist"/>
+        <!-- Google Sheets via Apps Script -->
+        <input type="hidden" name="formType" value="zG-Era-Waitlist"/>
 
         <div>
           <label class="block font-assamese text-xs text-gray-400 mb-1.5">
@@ -907,9 +906,42 @@
 
         <div>
           <label class="block font-assamese text-xs text-gray-400 mb-1.5">
-            <span data-lang="en">Your District</span><span data-lang="as">আপোনাৰ জিলা</span>
+            <span data-lang="en">Your District / Location</span><span data-lang="as">আপোনাৰ জিলা / অৱস্থান</span>
           </label>
-          <input type="text" name="District" class="form-inp" placeholder="e.g. Guwahati, Jorhat / যেনে: গুৱাহাটী, যোৰহাট..."/>
+          <!-- Hidden input that actually submits -->
+          <input type="hidden" name="District" id="districtValue"/>
+          <!-- Custom district picker -->
+          <div class="relative" id="districtPickerWrap">
+            <button type="button" id="districtTrigger"
+              class="form-inp flex items-center justify-between cursor-pointer text-left w-full"
+              onclick="toggleDistrictPicker()">
+              <span id="districtDisplay" class="text-gray-400/60">
+                <span data-lang="en">Select your district / location…</span>
+                <span data-lang="as">আপোনাৰ জিলা / অৱস্থান বাছনি কৰক…</span>
+              </span>
+              <svg id="districtChevron" class="w-4 h-4 text-gray-500 flex-shrink-0 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+
+            <!-- Dropdown panel -->
+            <div id="districtDropdown"
+              class="absolute left-0 right-0 z-50 mt-2 glass glass-gold rounded-2xl overflow-hidden shadow-2xl shadow-black/60 border border-goldAccent/20"
+              style="display:none; opacity:0; transform:translateY(-8px); transition: opacity 0.25s ease, transform 0.25s ease;">
+
+              <!-- Search box inside dropdown -->
+              <div class="px-3 pt-3 pb-2 border-b border-white/5">
+                <input type="text" id="districtSearch" placeholder="Search…"
+                  class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder-gray-600 outline-none focus:border-goldAccent/40 transition-colors"
+                  oninput="filterDistricts(this.value)"/>
+              </div>
+
+              <!-- Scroll list — only 3 rows visible -->
+              <div id="districtList"
+                style="max-height: calc(3 * 52px); overflow-y: scroll; scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(212,175,55,0.3) transparent;">
+              </div>
+            </div>
+          </div>
         </div>
 
         <div>
@@ -980,29 +1012,117 @@
 
 <!-- ══════════ SCRIPTS ══════════ -->
 <script>
-/* ── Language Switcher ── */
+/* ───────────────────────────────────────────
+   CONFIG
+─────────────────────────────────────────── */
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzKERtIkfJmBEm5TC5usFtlA2Hmbcf6QLVJ_YT75spheEI0qI-JHPhiUBBavcO2aKUw/exec';
+const GOAL = 100;
+
+/* ── District list ── */
+const DISTRICTS = [
+  'Indian (Outside Assam)',
+  'Out of Country',
+  'Baksa','Barpeta','Biswanath','Bongaigaon','Cachar','Charaideo',
+  'Chirang','Darrang','Dhemaji','Dhubri','Dibrugarh','Dima Hasao',
+  'Goalpara','Golaghat','Hailakandi','Hojai','Jorhat','Kamrup',
+  'Kamrup Metropolitan','Karbi Anglong','Karimganj','Kokrajhar',
+  'Lakhimpur','Majuli','Morigaon','Nagaon','Nalbari','Sivasagar',
+  'Sonitpur','South Salmara-Mankachar','Tamulpur','Tinsukia',
+  'Udalguri','West Karbi Anglong','Bajali'
+];
+let filteredDistricts = [...DISTRICTS];
+let districtOpen = false;
+
+/* ── Build district list items ── */
+function buildDistrictList(list) {
+  const ul = document.getElementById('districtList');
+  ul.innerHTML = '';
+  list.forEach(d => {
+    const item = document.createElement('div');
+    const isSpecial = d === 'Indian (Outside Assam)' || d === 'Out of Country';
+    item.className = 'district-item px-4 py-3.5 cursor-pointer text-sm transition-all duration-200 flex items-center gap-3 border-b border-white/5';
+    item.style.cssText = 'min-height:52px; color:rgba(255,255,255,0.7);';
+    item.innerHTML = `
+      <span style="width:6px;height:6px;border-radius:50%;flex-shrink:0;background:${isSpecial ? '#D4AF37' : 'rgba(227,34,39,0.5)'}"></span>
+      <span>${d}</span>`;
+    item.addEventListener('click', () => selectDistrict(d));
+    item.addEventListener('mouseenter', () => { item.style.background='rgba(212,175,55,0.08)'; item.style.color='#fff'; });
+    item.addEventListener('mouseleave', () => { item.style.background=''; item.style.color='rgba(255,255,255,0.7)'; });
+    ul.appendChild(item);
+  });
+}
+
+function filterDistricts(query) {
+  filteredDistricts = DISTRICTS.filter(d => d.toLowerCase().includes(query.toLowerCase()));
+  buildDistrictList(filteredDistricts);
+}
+
+function selectDistrict(val) {
+  document.getElementById('districtValue').value = val;
+  const disp = document.getElementById('districtDisplay');
+  disp.innerHTML = `<span style="color:#fff">${val}</span>`;
+  closeDistrictPicker();
+}
+
+function toggleDistrictPicker() {
+  districtOpen ? closeDistrictPicker() : openDistrictPicker();
+}
+
+function openDistrictPicker() {
+  districtOpen = true;
+  const dd = document.getElementById('districtDropdown');
+  const ch = document.getElementById('districtChevron');
+  buildDistrictList(DISTRICTS);
+  dd.style.display = 'block';
+  requestAnimationFrame(() => {
+    dd.style.opacity = '1';
+    dd.style.transform = 'translateY(0)';
+  });
+  ch.style.transform = 'rotate(180deg)';
+  setTimeout(() => document.getElementById('districtSearch').focus(), 50);
+}
+
+function closeDistrictPicker() {
+  districtOpen = false;
+  const dd = document.getElementById('districtDropdown');
+  const ch = document.getElementById('districtChevron');
+  dd.style.opacity = '0';
+  dd.style.transform = 'translateY(-8px)';
+  ch.style.transform = 'rotate(0deg)';
+  setTimeout(() => { dd.style.display = 'none'; }, 250);
+  document.getElementById('districtSearch').value = '';
+  filteredDistricts = [...DISTRICTS];
+}
+
+/* Close picker when clicking outside */
+document.addEventListener('click', e => {
+  const wrap = document.getElementById('districtPickerWrap');
+  if (wrap && !wrap.contains(e.target) && districtOpen) closeDistrictPicker();
+});
+
+/* ───────────────────────────────────────────
+   LANGUAGE SWITCHER
+─────────────────────────────────────────── */
 function switchLang(lang) {
   document.documentElement.lang = lang;
-  
   const btnEn = document.getElementById('btn-en');
   const btnAs = document.getElementById('btn-as');
-  
   if(lang === 'en') {
-      btnEn.classList.add('bg-gamosaRed', 'text-white');
-      btnEn.classList.remove('text-gray-400', 'hover:text-white');
-      
-      btnAs.classList.remove('bg-gamosaRed', 'text-white');
-      btnAs.classList.add('text-gray-400', 'hover:text-white');
+    btnEn.classList.add('bg-gamosaRed','text-white');
+    btnEn.classList.remove('text-gray-400','hover:text-white');
+    btnAs.classList.remove('bg-gamosaRed','text-white');
+    btnAs.classList.add('text-gray-400','hover:text-white');
   } else {
-      btnAs.classList.add('bg-gamosaRed', 'text-white');
-      btnAs.classList.remove('text-gray-400', 'hover:text-white');
-      
-      btnEn.classList.remove('bg-gamosaRed', 'text-white');
-      btnEn.classList.add('text-gray-400', 'hover:text-white');
+    btnAs.classList.add('bg-gamosaRed','text-white');
+    btnAs.classList.remove('text-gray-400','hover:text-white');
+    btnEn.classList.remove('bg-gamosaRed','text-white');
+    btnEn.classList.add('text-gray-400','hover:text-white');
   }
 }
 
-/* ── Typewriter ── */
+/* ───────────────────────────────────────────
+   TYPEWRITER
+─────────────────────────────────────────── */
 const phrasesEn = [
   "The Legend Lives Through Us.",
   "Unity. Legacy. Golden Assam.",
@@ -1026,7 +1146,6 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
     const isEn = document.documentElement.lang === 'en';
     const activePhrases = isEn ? phrasesEn : phrasesAs;
     const t = activePhrases[i % activePhrases.length];
-    
     for (let j = 1; j <= t.length; j++) { el.textContent = t.slice(0, j); await sleep(60); }
     await sleep(4000);
     for (let j = t.length; j >= 0; j--) { el.textContent = t.slice(0, j); await sleep(28); }
@@ -1035,73 +1154,144 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
   }
 })();
 
-/* ── Scroll reveal ── */
+/* ───────────────────────────────────────────
+   SCROLL REVEAL
+─────────────────────────────────────────── */
 const ro = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); ro.unobserve(e.target); } });
 }, { threshold: 0.08 });
 document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
 
-/* ── Counter ── */
-const MEMBERS = 27;
-const GOAL = 100;
-const co = new IntersectionObserver(entries => {
-  if (!entries[0].isIntersecting) return;
-  co.disconnect();
+/* ───────────────────────────────────────────
+   COUNTER — starts at 0, real submissions only
+─────────────────────────────────────────── */
+const STORAGE_KEY = 'zg_era_comrade_count';
+function getCount() { return parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10); }
+function incrementCount() {
+  const n = getCount() + 1;
+  localStorage.setItem(STORAGE_KEY, n);
+  return n;
+}
+
+function animateCounter(targetVal) {
   const numEl = document.getElementById('counter-num');
   const barEl = document.getElementById('counter-bar');
   const pctEl = document.getElementById('counter-pct');
+  if (!numEl) return;
   const start = performance.now();
   const dur = 2000;
-  const ease = t => 1 - Math.pow(1-t, 3);
+  const ease = t => 1 - Math.pow(1 - t, 3);
   const tick = now => {
     const p = Math.min((now - start) / dur, 1);
-    const v = Math.round(ease(p) * MEMBERS);
+    const v = Math.round(ease(p) * targetVal);
     numEl.textContent = v;
-    barEl.style.width = (v / GOAL * 100) + '%';
-    pctEl.textContent = v + ' / ' + GOAL;
+    if (barEl) barEl.style.width = (v / GOAL * 100) + '%';
+    if (pctEl) pctEl.textContent = v + ' / ' + GOAL;
     if (p < 1) requestAnimationFrame(tick);
   };
   requestAnimationFrame(tick);
+}
+
+/* Observe counter section — animate from 0 to stored count on first view */
+const co = new IntersectionObserver(entries => {
+  if (!entries[0].isIntersecting) return;
+  co.disconnect();
+  animateCounter(getCount());
 }, { threshold: 0.3 });
 const cs = document.getElementById('counter-section');
 if (cs) co.observe(cs);
 
-/* ── Form submit ── */
+/* ───────────────────────────────────────────
+   FORM SUBMIT → GOOGLE SHEETS
+─────────────────────────────────────────── */
 const form = document.getElementById('waitlistForm');
 if (form) {
   form.addEventListener('submit', async e => {
     e.preventDefault();
+
+    /* Validate district */
+    if (!document.getElementById('districtValue').value) {
+      const msg = document.getElementById('successMessage');
+      const isEn = document.documentElement.lang === 'en';
+      msg.textContent = isEn
+        ? 'Please select your district / location.'
+        : 'অনুগ্ৰহ কৰি আপোনাৰ জিলা / অৱস্থান বাছনি কৰক।';
+      msg.className = 'block font-assamese text-yellow-400 bg-yellow-500/10 border border-yellow-500/30 text-center mt-3 p-4 rounded-xl font-medium text-sm';
+      return;
+    }
+
     const btn = document.getElementById('submitBtn');
     const msg = document.getElementById('successMessage');
     const btnArrow = document.getElementById('btnArrow');
-    
-    // Changing button visual state during submission
     const isEn = document.documentElement.lang === 'en';
+
     const oldTextEn = document.querySelector('#btnText span[data-lang="en"]').textContent;
     const oldTextAs = document.querySelector('#btnText span[data-lang="as"]').textContent;
-    
     document.querySelector('#btnText span[data-lang="en"]').textContent = 'Joining...';
     document.querySelector('#btnText span[data-lang="as"]').textContent = 'যোগ হৈছে...';
-    
     btn.disabled = true;
     if (btnArrow) btnArrow.classList.add('hidden');
     msg.className = 'hidden';
-    
+
+    /* Build payload for Google Sheets */
+    const payload = new URLSearchParams({
+      Name:     form.querySelector('[name="Name"]').value,
+      Email:    form.querySelector('[name="Email"]').value,
+      WhatsApp: form.querySelector('[name="WhatsApp"]').value,
+      District: document.getElementById('districtValue').value,
+      Meaning:  form.querySelector('[name="Meaning"]').value,
+      Source:   'zG-Era-Website-Waitlist',
+      Timestamp: new Date().toISOString()
+    });
+
     try {
-      const res = await fetch('https://api.web3forms.com/submit', { method:'POST', body:new FormData(form) });
-      const data = await res.json();
-      if (data.success) {
-        msg.innerHTML = isEn 
-            ? '🎖️ জয় আই অসম। জয় জুবিন দা। You joined zG Era — you are now an Comrade. We will reach out soon.' 
-            : '🎖️ জয় আই অসম। জয় জুবিন দা। আপুনি zG Era-ত যোগ দিলে — আপুনি এতিয়া এজন কমৰেড । আমি সোনকালে যোগাযোগ কৰিম।';
-        msg.className = 'block font-assamese text-green-400 bg-green-500/10 border border-green-500/30 text-center mt-3 p-4 rounded-xl font-medium text-sm';
-        form.reset();
-      } else {
-        msg.textContent = data.message || (isEn ? 'Something went wrong. Please try again.' : 'কিবা সমস্যা হৈছে। অনুগ্ৰহ কৰি আকৌ চেষ্টা কৰক।');
-        msg.className = 'block font-assamese text-red-400 bg-red-500/10 border border-red-500/30 text-center mt-3 p-4 rounded-xl font-medium text-sm';
+      /* no-cors required for Apps Script cross-origin POST */
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: payload.toString()
+      });
+
+      /* Count this real submission */
+      const newCount = incrementCount();
+
+      msg.innerHTML = isEn
+        ? '🎖️ জয় আই অসম। জয় জুবিন দা। You joined zG Era — you are now a Comrade. We will reach out soon.'
+        : '🎖️ জয় আই অসম। জয় জুবিন দা। আপুনি zG Era-ত যোগ দিলে — আপুনি এতিয়া এজন কমৰেড। আমি সোনকালে যোগাযোগ কৰিম।';
+      msg.className = 'block font-assamese text-green-400 bg-green-500/10 border border-green-500/30 text-center mt-3 p-4 rounded-xl font-medium text-sm';
+
+      /* Update counter display immediately with smooth animation */
+      const numEl = document.getElementById('counter-num');
+      const barEl = document.getElementById('counter-bar');
+      const pctEl = document.getElementById('counter-pct');
+      if (numEl) {
+        const prev = parseInt(numEl.textContent || '0', 10);
+        const diff = newCount - prev;
+        if (diff > 0) {
+          let cur = prev;
+          const step = () => {
+            cur++;
+            numEl.textContent = cur;
+            if (barEl) barEl.style.width = (cur / GOAL * 100) + '%';
+            if (pctEl) pctEl.textContent = cur + ' / ' + GOAL;
+            if (cur < newCount) setTimeout(step, 120);
+          };
+          step();
+        }
       }
-    } catch {
-      msg.textContent = isEn ? 'Network error. Please check your connection.' : 'নেটৱৰ্ক সমস্যা। আপোনাৰ সংযোগ পৰীক্ষা কৰক।';
+
+      form.reset();
+      /* Reset district display */
+      document.getElementById('districtValue').value = '';
+      document.getElementById('districtDisplay').innerHTML = `
+        <span data-lang="en" class="text-gray-400/60">Select your district / location…</span>
+        <span data-lang="as" class="text-gray-400/60">আপোনাৰ জিলা / অৱস্থান বাছনি কৰক…</span>`;
+
+    } catch (err) {
+      msg.textContent = isEn
+        ? 'Network error. Please check your connection and try again.'
+        : 'নেটৱৰ্ক সমস্যা। সংযোগ পৰীক্ষা কৰক আৰু আকৌ চেষ্টা কৰক।';
       msg.className = 'block font-assamese text-red-400 bg-red-500/10 border border-red-500/30 text-center mt-3 p-4 rounded-xl font-medium text-sm';
     } finally {
       btn.disabled = false;
