@@ -1165,12 +1165,12 @@ document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
 /* ───────────────────────────────────────────
    COUNTER — starts at 0, real submissions only
 ─────────────────────────────────────────── */
-const STORAGE_KEY = 'zg_era_comrade_count';
-function getCount() { return parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10); }
-function incrementCount() {
-  const n = getCount() + 1;
-  localStorage.setItem(STORAGE_KEY, n);
-  return n;
+async function getRealCount() {
+  try {
+    const res = await fetch(GOOGLE_SCRIPT_URL);
+    const data = await res.json();
+    return data.count || 0;
+  } catch { return 0; }
 }
 
 function animateCounter(targetVal) {
@@ -1193,10 +1193,11 @@ function animateCounter(targetVal) {
 }
 
 /* Observe counter section — animate from 0 to stored count on first view */
-const co = new IntersectionObserver(entries => {
+const co = new IntersectionObserver(async entries => {
   if (!entries[0].isIntersecting) return;
   co.disconnect();
-  animateCounter(getCount());
+  const count = await getRealCount();
+  animateCounter(count);
 }, { threshold: 0.3 });
 const cs = document.getElementById('counter-section');
 if (cs) co.observe(cs);
@@ -1254,11 +1255,11 @@ if (form) {
       });
 
       /* Count this real submission */
-      const newCount = incrementCount();
+      const newCount = await getRealCount();
 
       msg.innerHTML = isEn
-        ? '🎖️ জয় আই অসম। জয় জুবিন দা। You joined zG Era — you are now a Comrade. We will reach out soon.'
-        : '🎖️ জয় আই অসম। জয় জুবিন দা। আপুনি zG Era-ত যোগ দিলে — আপুনি এতিয়া এজন কমৰেড। আমি সোনকালে যোগাযোগ কৰিম।';
+        ? '🎖️ জয় আই অসম। জয় জুবিন দা। You joined zG Era — you are now a Comrade. We will reach out soon. Join the WhatsApp Community.'
+        : '🎖️ জয় আই অসম। জয় জুবিন দা। আপুনি zG Era-ত যোগ দিলে — আপুনি এতিয়া এজন কমৰেড। আমি সোনকালে যোগাযোগ কৰিম।  WhatsApp ত যোগদান কৰক';
       msg.className = 'block font-assamese text-green-400 bg-green-500/10 border border-green-500/30 text-center mt-3 p-4 rounded-xl font-medium text-sm';
 
       /* Update counter display immediately with smooth animation */
