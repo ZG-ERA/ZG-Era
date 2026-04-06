@@ -1,0 +1,1913 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="zG Era — Preserving Zubeen da's legacy. Unity for Golden Assam."/>
+  <title>zG Era — Zubeen da's Legacy | Unity for Golden Assam</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Cinzel:wght@400;600;700;900&family=Noto+Sans+Bengali:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,300;1,400;1,600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            darkBg:    '#07080a',
+            darkCard:  '#0e0f12',
+            gamosaRed: '#E32227',
+            goldAccent:'#D4AF37',
+            goldLight: '#F0CC60',
+          },
+          fontFamily: {
+            heading:  ['"Space Grotesk"', 'sans-serif'],
+            vision:   ['"Cinzel"', 'serif'],
+            prose:    ['"Cormorant Garamond"', 'serif'],
+            assamese: ['"Noto Sans Bengali"', 'sans-serif'],
+          },
+          screens: {
+            'xs': '380px',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+    html { font-size: 16px; }
+    ::selection { background: rgba(227,34,39,0.35); color:#fff; }
+
+    /* ── Language Toggle Logic ── */
+    :root:lang(en) [data-lang="as"] { display: none !important; }
+    :root:lang(as) [data-lang="en"] { display: none !important; }
+
+    /* ── Grain overlay ── */
+    body::after {
+      content:''; position:fixed; inset:0; pointer-events:none; z-index:9999;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+    }
+
+    /* ── Glass ── */
+    .glass {
+      background: rgba(14,15,18,0.78);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .glass-red  { border-color: rgba(227,34,39,0.22); }
+    .glass-gold { border-color: rgba(212,175,55,0.22); }
+
+    /* ── Shimmer line ── */
+    .shimmer {
+      height:1px;
+      background: linear-gradient(90deg, transparent, rgba(212,175,55,0.08) 20%, rgba(212,175,55,0.5) 50%, rgba(212,175,55,0.08) 80%, transparent);
+    }
+
+    /* ── Hero bg ── */
+    .hero-bg {
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 40%, rgba(227,34,39,0.08) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 55% at 80% 20%, rgba(212,175,55,0.06) 0%, transparent 55%),
+        #07080a;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeInUp {
+      from { opacity:0; transform:translateY(20px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .fade { animation: fadeInUp 0.8s ease forwards; opacity:0; }
+    .d1{animation-delay:.1s} .d2{animation-delay:.22s}
+    .d3{animation-delay:.38s} .d4{animation-delay:.54s}
+    .d5{animation-delay:.7s}  .d6{animation-delay:.86s}
+
+    @keyframes float {
+      0%,100%{ transform:translateY(0); }
+      50%    { transform:translateY(-8px); }
+    }
+    .float { animation: float 5s ease-in-out infinite; }
+
+    @keyframes pulseGlow {
+      0%,100%{ box-shadow: 0 0 0 0 rgba(227,34,39,0); }
+      50%    { box-shadow: 0 0 24px 4px rgba(227,34,39,0.28); }
+    }
+    .pulse-glow { animation: pulseGlow 3s ease-in-out infinite; }
+
+    @keyframes wordCycle {
+      0%,100%{ opacity:.3; transform:scale(1); }
+      50%    { opacity:1; transform:scale(1.04); text-shadow:0 0 22px currentColor; }
+    }
+    .w1{animation:wordCycle 4.5s infinite ease-in-out;       display:inline-block;}
+    .w2{animation:wordCycle 4.5s infinite ease-in-out 1.5s;  display:inline-block;}
+    .w3{animation:wordCycle 4.5s infinite ease-in-out 3s;    display:inline-block;}
+
+    /* ── Scroll reveal ── */
+    .reveal { opacity:0; transform:translateY(26px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.in { opacity:1; transform:translateY(0); }
+
+    /* ── Pillar card ── */
+    .pillar-card { position:relative; overflow:hidden; transition: transform .35s, background .35s; }
+    .pillar-card::after {
+      content:''; position:absolute; bottom:0; left:0; right:0; height:2px;
+      background: linear-gradient(90deg, transparent, var(--ac), transparent);
+      transform: scaleX(0); transition: transform .4s;
+    }
+    .pillar-card:hover { transform:translateY(-4px); }
+    .pillar-card:hover::after { transform:scaleX(1); }
+    .pillar-card[data-ac="red"]  { --ac:#E32227; }
+    .pillar-card[data-ac="gold"] { --ac:#D4AF37; }
+
+    /* ── Timeline dot ── */
+    .dot-active { box-shadow: 0 0 12px 3px rgba(227,34,39,0.7); }
+
+    /* ── Progress bar ── */
+    .bar-fill {
+      height:100%; border-radius:9999px;
+      background: linear-gradient(90deg, #E32227, #D4AF37);
+      width:0; transition: width 2.2s cubic-bezier(.22,1,.36,1);
+    }
+
+    /* ── Form inputs ── */
+    .form-inp {
+      width:100%; background:rgba(0,0,0,0.5);
+      border:1px solid rgba(255,255,255,0.09); border-radius:.75rem;
+      padding:.8rem 1rem; color:#fff;
+      font-size:1rem; outline:none;
+      font-family:'Space Grotesk',sans-serif;
+      transition: border-color .25s, box-shadow .25s;
+      -webkit-appearance: none;
+    }
+    .form-inp::placeholder { color:rgba(255,255,255,0.22); }
+    .form-inp:focus {
+      border-color:#E32227;
+      box-shadow: 0 0 0 3px rgba(227,34,39,0.12);
+    }
+
+    /* ── Buttons ── */
+    .btn-red {
+      background:#E32227; color:#fff;
+      font-family:'Space Grotesk',sans-serif; font-weight:700;
+      letter-spacing:.04em; box-shadow:0 0 22px rgba(227,34,39,0.3);
+      transition:all .3s; display:inline-flex; align-items:center; justify-content:center;
+    }
+    .btn-red:hover { background:#c41a1e; box-shadow:0 0 40px rgba(227,34,39,0.55); transform:translateY(-2px); }
+    .btn-red:active { transform:translateY(0); }
+
+    .btn-gold {
+      background: linear-gradient(135deg, #D4AF37, #F0CC60); color:#07080a;
+      font-family:'Space Grotesk',sans-serif; font-weight:700;
+      letter-spacing:.04em; box-shadow:0 0 22px rgba(212,175,55,0.25);
+      transition:all .3s; display:inline-flex; align-items:center; justify-content:center;
+    }
+    .btn-gold:hover { box-shadow:0 0 36px rgba(212,175,55,0.45); transform:translateY(-2px); }
+    .btn-gold:active { transform:translateY(0); }
+
+    /* ── Manifesto quote ── */
+    .q-text {
+      font-family:'Cormorant Garamond',serif; font-style:italic;
+      font-size:clamp(1.1rem,2.4vw,1.5rem); line-height:1.8;
+      color:rgba(212,175,55,0.85);
+    }
+
+    /* ── Assamese subtext ── */
+    .as-label {
+      font-family:'Noto Sans Bengali',sans-serif;
+      font-size:clamp(.7rem,.9vw,.8rem);
+      color:rgba(212,175,55,0.55);
+      letter-spacing:.05em;
+    }
+
+    /* ── Mobile tweaks ── */
+    @media(max-width:640px){
+      .hide-mobile{ display:none !important; }
+      .mobile-px{ padding-left:1rem; padding-right:1rem; }
+      .mobile-text-sm{ font-size:.8rem !important; }
+    }
+
+    /* ── Download letter button ── */
+    .btn-download {
+      background: transparent;
+      border: 1.5px solid rgba(212,175,55,0.4);
+      color: #D4AF37;
+      font-family:'Space Grotesk',sans-serif; font-weight:600;
+      font-size:.8rem; letter-spacing:.08em; text-transform:uppercase;
+      padding:.7rem 1.4rem; border-radius:.6rem;
+      display:inline-flex; align-items:center; gap:.5rem;
+      transition: all .3s; cursor:pointer;
+      text-decoration:none;
+    }
+    .btn-download:hover {
+      background:rgba(212,175,55,0.08);
+      border-color:#D4AF37;
+      box-shadow: 0 0 20px rgba(212,175,55,0.15);
+    }
+
+    /* ── Cultural pattern band ── */
+    .culture-band {
+      background:
+        repeating-linear-gradient(90deg,
+          rgba(227,34,39,0.06) 0, rgba(227,34,39,0.06) 1px,
+          transparent 1px, transparent 24px
+        ),
+        repeating-linear-gradient(0deg,
+          rgba(212,175,55,0.04) 0, rgba(212,175,55,0.04) 1px,
+          transparent 1px, transparent 24px
+        );
+    }
+  </style>
+</head>
+<body class="bg-darkBg text-gray-200 font-heading antialiased overflow-x-hidden">
+
+<!-- ══════════ NAV ══════════ -->
+<nav class="fixed w-full z-50 top-0 glass border-b border-white/5">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="flex items-center justify-between h-16 md:h-20">
+
+      <!-- Logo -->
+      <div class="flex items-center gap-2.5">
+        <div style="width:3px;height:28px;background:linear-gradient(180deg,#E32227,#D4AF37);border-radius:2px"></div>
+        <div>
+          <div class="font-vision font-bold text-base sm:text-lg tracking-widest text-white leading-none">zG <span class="text-gamosaRed">ERA</span></div>
+          <div class="as-label leading-none mt-1">
+            <span data-lang="en">Zubeen da's Golden Era</span>
+            <span data-lang="as">জুবিন দাৰ সোণালী ধাৰা</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nav actions -->
+      <div class="flex items-center gap-2 sm:gap-4">
+        
+        <!-- Language Switcher -->
+        <div class="flex items-center bg-white/10 rounded-full p-1 mr-1">
+          <button onclick="switchLang('en')" id="btn-en" class="px-3 py-1.5 text-[10px] sm:text-xs font-bold rounded-full bg-gamosaRed text-white transition-all">EN</button>
+          <button onclick="switchLang('as')" id="btn-as" class="px-3 py-1.5 text-[10px] sm:text-xs font-bold rounded-full text-gray-400 hover:text-white transition-all">AS</button>
+        </div>
+
+        <a href="https://chat.whatsapp.com/Icg9yPkvPagAoWxJiJ67ZU?mode=gi_t" target="_blank"
+           class="hide-mobile flex items-center gap-1.5 text-xs text-gray-400 hover:text-white transition-colors px-3 py-2 rounded-full border border-white/10 hover:border-white/25">
+          <svg class="w-3.5 h-3.5 text-green-400" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          <span class="hidden sm:inline">WhatsApp</span>
+        </a>
+        <a href="#waitlist"
+           class="text-xs font-bold border border-gamosaRed text-gamosaRed hover:bg-gamosaRed hover:text-white transition-all duration-300 px-3 sm:px-4 py-2 rounded-full whitespace-nowrap">
+          <span data-lang="en">Join</span>
+          <span data-lang="as">যোগ দিয়ক</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════ HERO ══════════ -->
+<section class="hero-bg relative min-h-screen flex items-center justify-center pt-24 pb-16 px-4 overflow-hidden">
+
+  <div class="absolute top-1/4 left-0 w-72 sm:w-96 h-72 sm:h-96 bg-gamosaRed/5 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute bottom-1/4 right-0 w-56 sm:w-80 h-56 sm:h-80 bg-goldAccent/5 rounded-full blur-3xl pointer-events-none"></div>
+
+  <div class="max-w-3xl mx-auto text-center z-10 w-full">
+
+    <!-- Title -->
+    <div class="fade d2 mb-2">
+      <p class="font-assamese text-xs sm:text-sm text-goldAccent/60 tracking-widest mb-2">
+        <span data-lang="en">Zubeen da's Generational Revolution</span>
+        <span data-lang="as">জুবিন দাৰ এই প্ৰজন্মীয় যুগ</span>
+      </p>
+      <h1 class="font-vision font-black text-[3.2rem] xs:text-6xl sm:text-7xl md:text-8xl text-white leading-[0.9] tracking-tight">zG Era</h1>
+    </div>
+
+    <!-- Typewriter -->
+    <div class="h-9 sm:h-12 flex items-center justify-center mb-6 fade d2">
+      <span id="typewriter-text" class="text-transparent bg-clip-text bg-gradient-to-r from-gamosaRed to-goldAccent font-semibold text-base sm:text-xl tracking-wide"></span>
+      <span class="text-gamosaRed animate-pulse ml-1 text-xl font-thin">|</span>
+    </div>
+
+    <!-- Triple meaning card -->
+    <div class="py-5 sm:py-7 px-4 sm:px-6 glass glass-red rounded-2xl sm:rounded-3xl fade d3 mb-6 sm:mb-8">
+      <p class="font-assamese text-xs tracking-widest text-gamosaRed/60 uppercase mb-4">
+        <span data-lang="en">The Triple Meaning</span>
+        <span data-lang="as">তিনিটা অৰ্থ</span>
+      </p>
+
+      <div class="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-6 mb-5">
+        <div class="text-center">
+          <div class="text-xs text-gray-500 font-assamese mb-0.5">
+            <span data-lang="en">Zubeen Garg's</span>
+            <span data-lang="as">জুবিন গাৰ্গৰ</span>
+          </div>
+          <span class="text-sm sm:text-base text-gray-300">Zubeen Garg's <span class="text-goldAccent font-semibold">Era</span></span>
+        </div>
+        <span class="hide-mobile text-white/10 text-xl">·</span>
+        <div class="text-center">
+          <div class="text-xs text-gray-500 font-assamese mb-0.5">
+            <span data-lang="en">Golden Era</span>
+            <span data-lang="as">সোণালী যুগ</span>
+          </div>
+          <span class="text-sm sm:text-base text-gray-300">Zubeen's <span class="text-goldAccent font-semibold">Golden Era</span></span>
+        </div>
+        <span class="hide-mobile text-white/10 text-xl">·</span>
+        <div class="text-center">
+          <div class="text-xs text-gray-500 font-assamese mb-0.5">
+            <span data-lang="en">Generational Era</span>
+            <span data-lang="as">প্ৰজন্মীয় যুগ</span>
+          </div>
+          <span class="text-sm sm:text-base text-gray-300">Zubeen's <span class="text-goldAccent font-semibold">Generational Era</span></span>
+        </div>
+      </div>
+
+      <a href="#waitlist" class="btn-red text-xs sm:text-sm px-6 sm:px-8 py-2.5 sm:py-3 rounded-full pulse-glow">
+        <span data-lang="en">Join the Movement →</span>
+        <span data-lang="as">আন্দোলনত যোগ দিয়ক →</span>
+      </a>
+    </div>
+
+    <!-- Assamese quote -->
+    <p class="font-assamese text-sm sm:text-lg text-gray-300 font-medium leading-relaxed max-w-2xl mx-auto fade d4 mb-4 px-2">
+      <span data-lang="en">As the new generation of the Zubeen Era, our effort is to fulfill Dada's dream of a Golden Assam by performing our duties with dedication.</span>
+      <span data-lang="as">জুবিন যুগৰ নৱপ্ৰজন্ম হৈ দাদাৰ সোণৰ অসমৰ সপোন পূৰ্ণ কৰাৰ হকে, আমি আমাৰ দায়িত্ব আৰু কৰ্তব্য নিষ্ঠাৰে পালন কৰি আগুৱাই যোৱাৰ প্ৰচেষ্টা।</span>
+    </p>
+
+    <p class="text-xs sm:text-sm text-gray-500 max-w-xl mx-auto leading-relaxed fade d5 px-2">
+      Not just a platform — a commitment to <strong class="text-white">Unity, Legacy, and a Golden Assam.</strong>
+    </p>
+
+    <!-- Scroll hint -->
+    <div class="mt-10 sm:mt-14 flex justify-center fade d6">
+      <div class="flex flex-col items-center gap-2 text-gray-600 float">
+        <span class="font-assamese text-xs" data-lang="en">Scroll Down</span>
+        <span class="font-assamese text-xs" data-lang="as">তলত চাওক</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="shimmer absolute bottom-0 left-0 right-0"></div>
+</section>
+
+<!-- ══════════ STATS ══════════ -->
+<section class="relative z-10 py-8 sm:py-10 bg-black/50 border-y border-white/5">
+  <div class="max-w-4xl mx-auto px-4">
+    <div class="flex flex-col items-center justify-center text-center">
+      <div class="font-vision text-4xl sm:text-5xl font-bold text-white mb-2">∞</div>
+      <div class="font-assamese text-sm sm:text-base text-gray-400 leading-snug tracking-wide">
+        <span data-lang="en">We'll carry the legacy alive for centuries</span>
+        <span data-lang="as">আমি এই সত্তা যুগ যুগ ধৰি জীয়াই ৰাখিম</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ MANIFESTO ══════════ -->
+<section class="relative z-10 py-20 sm:py-28 px-4 overflow-hidden culture-band">
+  <div class="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden select-none">
+    <span class="font-assamese text-[22vw] font-black text-white/[0.012] whitespace-nowrap" data-lang="en">LEGACY</span>
+    <span class="font-assamese text-[22vw] font-black text-white/[0.012] whitespace-nowrap" data-lang="as">সত্তা</span>
+  </div>
+
+  <div class="max-w-3xl mx-auto text-center relative z-10">
+    <div class="reveal mb-5">
+      <p class="font-assamese text-xs tracking-widest text-gamosaRed/60 uppercase">
+        <span data-lang="en">Our Manifesto</span>
+        <span data-lang="as">আমাৰ ঘোষণাপত্ৰ</span>
+      </p>
+    </div>
+
+    <h2 class="font-vision text-3xl sm:text-4xl md:text-6xl font-bold text-white leading-tight mb-3 reveal">
+      <span data-lang="en">He didn't just sing songs.</span>
+      <span data-lang="as">তেওঁ কেৱল গান গোৱা নাছিল।</span>
+    </h2>
+    <h2 class="font-vision text-2xl sm:text-3xl md:text-5xl font-bold leading-tight mb-8 reveal">
+      <span data-lang="en">He <span class="text-transparent bg-clip-text bg-gradient-to-r from-gamosaRed to-goldAccent">sang us.</span></span>
+      <span data-lang="as">তেওঁ <span class="text-transparent bg-clip-text bg-gradient-to-r from-gamosaRed to-goldAccent">আমাৰ কথাই গাইছিল।</span></span>
+    </h2>
+
+    <p class="q-text reveal mb-8 px-2">
+      "Zubeen da carried the weight of Assam in his chest — the rivers, the paddy fields, the pain of its people, and the golden dream of what this land could become."
+    </p>
+
+    <p class="text-gray-400 text-sm sm:text-base leading-relaxed reveal mb-6 px-2">
+      <span data-lang="en">He walked the socialist path. He believed that when common people unite, extraordinary things happen. He never sought power — he only asked us to love Assam.</span>
+      <span data-lang="as">তেওঁ সমাজবাদী পথত খোজ দিছিল। তেওঁ বিশ্বাস কৰিছিল যে সাধাৰণ মানুহ একগোট হ'লে অসাধাৰণ কাম হয়। তেওঁ কেতিয়াও ক্ষমতা বিচৰা নাছিল — কেৱল আমাক অসমক ভালপাবলৈ কৈছিল।</span>
+    </p>
+
+    <!-- Gold callout -->
+    <div class="glass glass-gold rounded-xl sm:rounded-2xl px-5 sm:px-8 py-6 sm:py-7 text-left reveal mb-6">
+      <div class="flex items-start gap-3 sm:gap-4">
+        <div class="w-0.5 self-stretch bg-gradient-to-b from-gamosaRed to-goldAccent rounded-full flex-shrink-0"></div>
+        <div>
+          <p class="font-assamese text-xs text-goldAccent/50 mb-2">
+            <span data-lang="en">Quote</span>
+            <span data-lang="as">উদ্ধৃতি</span>
+          </p>
+          <p class="q-text text-gray-300">
+            <span data-lang="en">"A legacy does not live in monuments. It lives in those who refuse to let it die."</span>
+            <span data-lang="as">"এটা সত্তা কেতিয়াও স্মৃতিস্তম্ভত জীয়াই নাথাকে। ই জীয়াই থাকে সেইসকল মানুহৰ মাজত যিসকলে ইয়াক নিঃশেষ হ'বলৈ দিবলৈ অস্বীকাৰ কৰে।"</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <p class="font-vision text-lg sm:text-2xl font-bold text-white tracking-wide reveal">
+      <span data-lang="en">This is not a fan group. <span class="text-gamosaRed">This is a movement.</span></span>
+      <span data-lang="as">এইটো কোনো ফেন গ্ৰুপ নহয়। <span class="text-gamosaRed">এইটো এক আন্দোলন।</span></span>
+    </p>
+  </div>
+</section>
+
+<div class="shimmer"></div>
+
+<!-- ══════════ PILLARS ══════════ -->
+<section class="relative z-10 py-20 sm:py-28 px-4">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-12 sm:mb-16">
+      <div class="reveal mb-4">
+        <p class="font-assamese text-xs tracking-widest text-gamosaRed/60 uppercase">
+          <span data-lang="en">What We Stand For</span>
+          <span data-lang="as">আমাৰ লক্ষ্য আৰু আদৰ্শ</span>
+        </p>
+      </div>
+      <h2 class="font-vision text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-8 reveal">
+        <span data-lang="en">The Three Pillars</span>
+        <span data-lang="as">তিনিটা স্তম্ভ</span>
+      </h2>
+
+      <!-- Animated words -->
+      <div class="flex flex-col items-center space-y-1 mb-8 reveal">
+        <span class="font-vision text-xl sm:text-2xl md:text-3xl font-bold text-white w1 tracking-[0.2em]">UNITY · একতা</span>
+        <span class="font-vision text-xl sm:text-2xl md:text-3xl font-bold text-gamosaRed w2 tracking-[0.2em]">SOCIALIST · সমাজবাদী</span>
+        <span class="font-vision text-xl sm:text-2xl md:text-3xl font-bold text-goldAccent w3 tracking-[0.2em]">IDEOLOGIST · আদৰ্শবাদী</span>
+      </div>
+
+      <p class="text-gray-400 max-w-xl mx-auto text-xs sm:text-sm reveal px-2">
+        <span data-lang="en">Built on Zubeen da's philosophy — keeping his legacy alive digitally and physically.</span>
+        <span data-lang="as">জুবিন দাৰ দৰ্শনৰ ওপৰত নিৰ্মিত — তেওঁৰ সত্তা ডিজিটেল আৰু বাস্তৱিকভাৱে সজীৱ কৰি ৰখা।</span>
+      </p>
+    </div>
+
+    <!-- The Vision Header -->
+    <div class="text-center mb-10 sm:mb-12 reveal">
+      <h2 class="font-vision text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-2">
+        <span data-lang="en">The Vision</span>
+        <span data-lang="as">আমাৰ লক্ষ্য</span>
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+      <!-- 01 -->
+      <div class="pillar-card glass glass-gold rounded-xl sm:rounded-2xl p-5 sm:p-7 reveal" data-ac="gold">
+        <div class="flex items-start gap-4 mb-4">
+          <span class="font-vision text-4xl sm:text-5xl font-black text-goldAccent/20 leading-none flex-shrink-0">01</span>
+          <div class="w-10 h-10 sm:w-12 sm:h-12 bg-goldAccent/10 rounded-xl flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-goldAccent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+            </svg>
+          </div>
+        </div>
+        <div class="font-assamese text-xs text-goldAccent/60 mb-0.5">
+          <span data-lang="en">Legacy Preservation</span>
+          <span data-lang="as">সত্তা সংৰক্ষণ</span>
+        </div>
+        <h3 class="font-vision text-base sm:text-xl font-bold text-white mb-2 sm:mb-3 tracking-wide">Legacy Preservation</h3>
+        <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">
+          <span data-lang="en">Document, share, and honor Zubeen da's music, ideology, and vision. His light must never fade.</span>
+          <span data-lang="as">জুবিন দাৰ সংগীত, মতাদৰ্শ আৰু দৃষ্টিভংগী নথিভুক্ত কৰক, প্ৰচাৰ কৰক আৰু সন্মান জনাওক। তেওঁৰ পোহৰ কেতিয়াও ম্লান হ'বলৈ দিব নালাগিব।</span>
+        </p>
+      </div>
+
+      <!-- 02 -->
+      <div class="pillar-card glass glass-red rounded-xl sm:rounded-2xl p-5 sm:p-7 reveal" data-ac="red">
+        <div class="flex items-start gap-4 mb-4">
+          <span class="font-vision text-4xl sm:text-5xl font-black text-gamosaRed/20 leading-none flex-shrink-0">02</span>
+          <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gamosaRed/10 rounded-xl flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-gamosaRed" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="font-assamese text-xs text-gamosaRed/60 mb-0.5">
+          <span data-lang="en">Community For Unity</span>
+          <span data-lang="as">একতাৰ সম্প্ৰদায়</span>
+        </div>
+        <h3 class="font-vision text-base sm:text-xl font-bold text-white mb-2 sm:mb-3 tracking-wide">Community For Unity</h3>
+        <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">
+          <span data-lang="en">Build real connections — not just online followers. Physical gatherings, shared resources. Build a community with culture.</span>
+          <span data-lang="as">প্ৰকৃত সংযোগ স্থাপন কৰক — কেৱল অনলাইন অনুগামী নহয়। মুখামুখি সভা, উমৈহতীয়া সম্পদৰ ব্যৱহাৰ। সংস্কৃতিৰে এক শক্তিশালী সম্প্ৰদায় গঠন কৰক।</span>
+        </p>
+      </div>
+
+      <!-- 03 -->
+      <div class="pillar-card glass glass-red rounded-xl sm:rounded-2xl p-5 sm:p-7 reveal" data-ac="red">
+        <div class="flex items-start gap-4 mb-4">
+          <span class="font-vision text-4xl sm:text-5xl font-black text-gamosaRed/20 leading-none flex-shrink-0">03</span>
+          <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gamosaRed/10 rounded-xl flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-gamosaRed" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="font-assamese text-xs text-gamosaRed/60 mb-0.5">
+          <span data-lang="en">Socialist Path</span>
+          <span data-lang="as">সমাজবাদী পথ</span>
+        </div>
+        <h3 class="font-vision text-base sm:text-xl font-bold text-white mb-2 sm:mb-3 tracking-wide">Socialist Path</h3>
+        <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">
+          <span data-lang="en">Create opportunities together. Share talent, skills, and resources. What one cannot do alone, we will do united.</span>
+          <span data-lang="as">একেলগে সুযোগ সৃষ্টি কৰক। প্ৰতিভা, দক্ষতা আৰু সম্পদ বিনিময় কৰক। এজনে যি কৰিব নোৱাৰে, আমি সকলোৱে একগোট হৈ সেয়া কৰিম।</span>
+        </p>
+      </div>
+
+      <!-- 04 -->
+      <div class="pillar-card glass glass-gold rounded-xl sm:rounded-2xl p-5 sm:p-7 reveal" data-ac="gold">
+        <div class="flex items-start gap-4 mb-4">
+          <span class="font-vision text-4xl sm:text-5xl font-black text-goldAccent/20 leading-none flex-shrink-0">04</span>
+          <div class="w-10 h-10 sm:w-12 sm:h-12 bg-goldAccent/10 rounded-xl flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-goldAccent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+            </svg>
+          </div>
+        </div>
+        <div class="font-assamese text-xs text-goldAccent/60 mb-0.5">
+          <span data-lang="en">Golden Assam</span>
+          <span data-lang="as">সোণালী অসম</span>
+        </div>
+        <h3 class="font-vision text-base sm:text-xl font-bold text-white mb-2 sm:mb-3 tracking-wide">Golden Assam</h3>
+        <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">
+          <span data-lang="en">Zubeen da's dream of a prosperous, proud Assam — built not just with songs, but with our own hands and hearts.</span>
+          <span data-lang="as">জুবিন দাৰ এখন সমৃদ্ধ, গৌৰৱময় অসমৰ সপোন — কেৱল গানৰ মাজেৰেই নহয়, আমাৰ নিজৰ হাত আৰু হৃদয়েৰে গঢ় দিয়াৰ এক অভিযান।</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="shimmer"></div>
+
+<!-- ══════════ COUNTER ══════════ -->
+<section class="relative z-10 py-16 sm:py-20 px-4 overflow-hidden" id="counter-section">
+  <div class="absolute inset-0 bg-gamosaRed/5"></div>
+  <div class="absolute inset-0" style="background:repeating-linear-gradient(0deg,transparent,transparent 36px,rgba(255,255,255,0.015) 36px,rgba(255,255,255,0.015) 37px)"></div>
+
+  <div class="max-w-2xl mx-auto text-center relative z-10">
+    <div class="reveal mb-4">
+      <p class="font-assamese text-xs tracking-widest text-gamosaRed/60 uppercase">
+        <span data-lang="en">Our First Milestone</span>
+        <span data-lang="as">আমাৰ প্ৰথম লক্ষ্য</span>
+      </p>
+    </div>
+    <div class="font-vision font-black text-[4.5rem] sm:text-[7rem] md:text-[9rem] text-goldAccent leading-none reveal" id="counter-num">0</div>
+    <p class="font-assamese text-base sm:text-xl text-gray-300 font-semibold mb-6 reveal">
+      <span data-lang="en">Hearts United</span>
+      <span data-lang="as">হৃদয় একগোট হৈছে</span>
+    </p>
+    <p class="font-assamese text-xs sm:text-sm text-gray-500 mb-6 reveal">
+      <span data-lang="en">Goal: <span class="text-white font-bold">100 Members</span> → First Gathering at Zubeen Khetra</span>
+      <span data-lang="as">লক্ষ্য: <span class="text-white font-bold">১০০ সদস্য</span> → জুবিন ক্ষেত্ৰত প্ৰথম সভা</span>
+    </p>
+
+    <div class="w-full max-w-sm mx-auto bg-white/5 rounded-full h-1.5 mb-2 overflow-hidden reveal">
+      <div class="bar-fill" id="counter-bar"></div>
+    </div>
+    <p class="text-xs text-gray-700 reveal" id="counter-pct">0 / 100</p>
+  </div>
+</section>
+
+<div class="shimmer"></div>
+
+<!-- ══════════ SUNDAY LETTER ══════════ -->
+<section class="relative z-10 py-16 sm:py-20 px-4 bg-darkCard/40 border-y border-white/5">
+  <div class="max-w-2xl mx-auto text-center">
+    <div class="reveal mb-4">
+      <p class="font-assamese text-xs tracking-widest text-goldAccent/60 uppercase">
+        <span data-lang="en">Letter to the People</span>
+        <span data-lang="as">ৰাইজলৈ চিঠি</span>
+      </p>
+    </div>
+    <h2 class="font-vision text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 reveal">
+      <span data-lang="en">The Sunday Letter</span>
+      <span data-lang="as">দেওবাৰৰ চিঠি</span>
+    </h2>
+
+    <p class="text-gray-400 text-xs sm:text-sm leading-relaxed reveal mb-8 px-2">
+      <span data-lang="en">This letter is distributed by hand — to touch people personally. Download it, print it, and share it with those around you.</span>
+      <span data-lang="as">এই চিঠিখন হাতে হাতে বিতৰণ কৰা হ'ব — মানুহক ব্যক্তিগতভাৱে স্পৰ্শ কৰিবলৈ। ইয়াক ডাউনলোড কৰক, প্ৰিণ্ট কৰক আৰু আপোনাৰ চাৰিওফালৰ মানুহৰ সৈতে বিতৰণ কৰক।</span>
+    </p>
+
+    <!-- Letter preview -->
+    <div class="glass glass-gold rounded-xl sm:rounded-2xl p-5 sm:p-7 text-left reveal mb-6">
+      <p class="font-assamese text-xs text-goldAccent/50 mb-3 uppercase tracking-widest">
+        <span data-lang="en">Excerpt of the Letter</span>
+        <span data-lang="as">চিঠিখনৰ এটা অংশ</span>
+      </p>
+      <p class="font-assamese text-sm sm:text-base text-gray-300 leading-relaxed mb-3">
+        <span data-lang="en">Dear Brother / Sister,</span>
+        <span data-lang="as">প্ৰিয় ভাই / ভনী,</span>
+      </p>
+      <p class="font-assamese text-xs sm:text-sm text-gray-400 leading-relaxed mb-3">
+        <span data-lang="en">You are holding this letter because you were here, at this moment. And this is no coincidence.</span>
+        <span data-lang="as">আপুনি এই চিঠিখন হাতত লৈছে কাৰণ আপুনি এই মুহূৰ্তত, এইখিনিতে উপস্থিত আছিল। আৰু এইটো কোনো কাকতালীয় কথা নহয়।</span>
+      </p>
+      <p class="font-assamese text-xs sm:text-sm text-gray-400 leading-relaxed mb-4">
+        <span data-lang="en">Zubeen dada didn't just sing songs. He sang us — our pain, our pride, our Assam. He carried the dream of a <strong class="text-white">Golden Assam</strong>...</span>
+        <span data-lang="as">জুবিন দাই কেৱল গান গোৱা নাছিল। তেওঁ আমাৰ কথাই গাইছিল — আমাৰ যন্ত্ৰণা, আমাৰ গৌৰৱ, আমাৰ অসমৰ কথা। তেওঁ এখন <strong class="text-white">সোণালী অসমৰ</strong> সপোন কঢ়িয়াই ফুৰিছিল...</span>
+      </p>
+    </div>
+
+    <!-- Download buttons -->
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-3 reveal">
+      <a href="https://drive.google.com/file/d/1yBcfMojaVgpJj_XWJzyhl85Nx9z_AUTg/view?usp=drivesdk" target="_blank" class="btn-download w-full sm:w-auto justify-center">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+        </svg>
+        <span data-lang="en">Download Assamese Letter (PDF)</span>
+        <span data-lang="as">অসমীয়া চিঠিখন ডাউনলোড কৰক (PDF)</span>
+      </a>
+      <a href="https://drive.google.com/file/d/1DEhMRRerQcAzPlcof9h2oodEQD60awbG/view?usp=drivesdk" target="_blank" class="btn-download w-full sm:w-auto justify-center">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+        </svg>
+        <span data-lang="en">Download English Letter (PDF)</span>
+        <span data-lang="as">ইংৰাজী চিঠিখন ডাউনলোড কৰক (PDF)</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ ROADMAP ══════════ -->
+<section class="relative z-10 py-20 sm:py-28 px-4">
+  <div class="max-w-3xl mx-auto">
+    <div class="text-center mb-12 sm:mb-16">
+      <div class="reveal mb-4">
+        <p class="font-assamese text-xs tracking-widest text-gamosaRed/60 uppercase">
+          <span data-lang="en">The Journey</span>
+          <span data-lang="as">যাত্ৰা</span>
+        </p>
+      </div>
+      <h2 class="font-vision text-3xl sm:text-4xl font-bold text-white mb-2 reveal">Roadmap</h2>
+      <p class="font-assamese text-xs sm:text-sm text-gray-500 reveal">
+        <span data-lang="en">Step by step, we will build the movement.</span>
+        <span data-lang="as">পদক্ষেপে পদক্ষেপে আমি এই আন্দোলন গঢ়ি তুলিম।</span>
+      </p>
+    </div>
+
+    <div class="relative border-l-2 border-gamosaRed/20 ml-3 sm:ml-6 space-y-10 sm:space-y-12 pb-4">
+
+      <div class="relative pl-6 sm:pl-10 reveal">
+        <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-gamosaRed dot-active"></div>
+        <div class="inline-flex items-center gap-2 mb-1.5">
+          <span class="font-assamese text-xs text-gamosaRed font-bold">
+            <span data-lang="en">Phase 1 — Now</span>
+            <span data-lang="as">পৰ্যায় ১ — এতিয়া</span>
+          </span>
+          <span class="text-xs bg-gamosaRed/20 text-gamosaRed px-2 py-0.5 rounded-full">
+            <span data-lang="en">Ongoing</span>
+            <span data-lang="as">চলি আছে</span>
+          </span>
+        </div>
+        <h3 class="font-heading text-base sm:text-xl md:text-2xl font-bold text-white mt-1">Digital Community & Waitlist</h3>
+        <p class="font-assamese text-xs text-gray-500 mt-0.5 mb-2">
+          <span data-lang="en">Digital Community & Waitlist</span>
+          <span data-lang="as">ডিজিটেল সম্প্ৰদায় আৰু প্ৰতীক্ষা তালিকা</span>
+        </p>
+        <p class="text-gray-400 text-xs sm:text-sm leading-relaxed">
+          <span data-lang="en">Uniting the core believers. Physical letter distribution — reaching out to people. <strong class="text-white">You are here.</strong></span>
+          <span data-lang="as">মূল বিশ্বাসীসকলক একগোট কৰা। হাতে হাতে চিঠি বিতৰণ কৰা — মানুহৰ কাষলৈ যোৱা। <strong class="text-white">আপুনি বৰ্তমান ইয়াত আছে।</strong></span>
+        </p>
+      </div>
+
+      <div class="relative pl-6 sm:pl-10 reveal">
+        <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-darkBg border-2 border-goldAccent/60"></div>
+        <span class="font-assamese text-xs text-goldAccent font-bold">
+          <span data-lang="en">Phase 2</span>
+          <span data-lang="as">পৰ্যায় ২</span>
+        </span>
+        <h3 class="font-heading text-base sm:text-xl md:text-2xl font-bold text-white mt-1">First Gathering — Zubeen Khetra</h3>
+        <p class="font-assamese text-xs text-gray-500 mt-0.5 mb-2">
+          <span data-lang="en">First Gathering — Zubeen Khetra</span>
+          <span data-lang="as">প্ৰথম সভা — জুবিন ক্ষেত্ৰ</span>
+        </p>
+        <p class="text-gray-400 text-xs sm:text-sm leading-relaxed">
+          <span data-lang="en">When we hit 100 members, we gather at Zubeen Khetra. Physical presence. Speeches. Collective pledge.</span>
+          <span data-lang="as">১০০ সদস্য হ'লে জুবিন ক্ষেত্ৰত আমি একগোট হ'ম। সশৰীৰে উপস্থিতি। ভাষণ। সামূহিক প্ৰতিশ্ৰুতি।</span>
+        </p>
+      </div>
+
+      <div class="relative pl-6 sm:pl-10 reveal">
+        <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-darkBg border-2 border-white/20"></div>
+        <span class="font-assamese text-xs text-gray-500 font-bold">
+          <span data-lang="en">Phase 3</span>
+          <span data-lang="as">পৰ্যায় ৩</span>
+        </span>
+        <h3 class="font-heading text-base sm:text-xl md:text-2xl font-bold text-white mt-1">zG Era Platform Launch</h3>
+        <p class="font-assamese text-xs text-gray-500 mt-0.5 mb-2">
+          <span data-lang="en">zG Era Platform Launch</span>
+          <span data-lang="as">zG Era প্লেটফৰ্ম মুকলি</span>
+        </p>
+        <p class="text-gray-400 text-xs sm:text-sm leading-relaxed">
+          <span data-lang="en">Full digital platform — tree plantation tracking, ZG coins, cultural collaboration.</span>
+          <span data-lang="as">সম্পূৰ্ণ ডিজিটেল প্লেটফৰ্ম — গছ ৰোপণ ট্ৰেকিং, ZG coins, সাংস্কৃতিক সহযোগিতা।</span>
+        </p>
+      </div>
+
+      <div class="relative pl-6 sm:pl-10 reveal">
+        <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-darkBg border-2 border-gamosaRed/60"></div>
+        <span class="font-assamese text-xs text-gamosaRed font-bold">
+          <span data-lang="en">Phase 4 — The Dream</span>
+          <span data-lang="as">পৰ্যায় ৪ — সপোন</span>
+        </span>
+        <h3 class="font-heading text-base sm:text-xl md:text-2xl font-bold text-white mt-1">Permanent Zubeen Khetra</h3>
+        <p class="font-assamese text-xs text-gray-500 mt-0.5 mb-2">
+          <span data-lang="en">Permanent Zubeen Khetra</span>
+          <span data-lang="as">স্থায়ী জুবিন ক্ষেত্ৰ</span>
+        </p>
+        <p class="text-gray-400 text-xs sm:text-sm leading-relaxed">
+          <span data-lang="en">Build an open stage. Plan a statue. Create a permanent monument to his golden legacy.</span>
+          <span data-lang="as">এখন মুকলি মঞ্চ নিৰ্মাণ কৰা। এটা মূৰ্তিৰ পৰিকল্পনা কৰা। তেওঁৰ সোণালী সত্তাৰ এক স্থায়ী স্মৃতিস্তম্ভ গঢ়ি তোলা।</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="shimmer"></div>
+
+<!-- ══════════ GATHERING ══════════ -->
+<section class="relative z-10 py-20 sm:py-28 px-4 overflow-hidden bg-darkCard/20">
+  <div class="absolute top-0 right-0 w-64 sm:w-96 h-64 sm:h-96 bg-goldAccent/4 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute bottom-0 left-0 w-48 sm:w-64 h-48 sm:h-64 bg-gamosaRed/5 rounded-full blur-3xl pointer-events-none"></div>
+
+  <div class="max-w-4xl mx-auto relative z-10">
+    <div class="text-center mb-10 sm:mb-14">
+      <div class="reveal mb-4">
+        <p class="font-assamese text-xs tracking-widest text-gamosaRed/60 uppercase">
+          <span data-lang="en">The First Gathering</span>
+          <span data-lang="as">প্ৰথম সভা</span>
+        </p>
+      </div>
+      <h2 class="font-vision text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-2 reveal">
+        <span data-lang="en">"Zubeen da's Dream"</span>
+        <span data-lang="as">"জুবিন দাৰ সপোন"</span>
+      </h2>
+      <span class="block font-prose text-xl sm:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-goldAccent to-goldLight italic reveal mb-3">The First Step</span>
+      <p class="text-gray-400 text-xs sm:text-sm max-w-xl mx-auto reveal font-assamese">
+        <span data-lang="en">When 100 hearts unite — we will meet at Zubeen Khetra.</span>
+        <span data-lang="as">যেতিয়া ১০০ হৃদয় একগোট হ'ব — আমি জুবিন ক্ষেত্ৰত মিলিত হ'ম।</span>
+      </p>
+    </div>
+
+    <!-- Agenda grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-8 sm:mb-12">
+      <div class="glass rounded-xl p-4 sm:p-5 reveal">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="text-goldAccent font-vision font-bold text-xs sm:text-sm flex-shrink-0">০:০০</span>
+          <div class="flex-1 h-px bg-white/5"></div>
+        </div>
+        <h4 class="font-heading font-semibold text-white text-xs sm:text-sm mb-1">Arrival & Meeting</h4>
+        <p class="font-assamese text-xs text-gray-500 mb-1">
+          <span data-lang="en">Arrival & Introductions</span>
+          <span data-lang="as">আগমন আৰু পৰিচয়</span>
+        </p>
+        <p class="text-xs text-gray-600 leading-relaxed">Soft Zubeen da music playing, brothers and sisters meeting for the first time</p>
+      </div>
+      <div class="glass rounded-xl p-4 sm:p-5 reveal">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="text-goldAccent font-vision font-bold text-xs sm:text-sm flex-shrink-0">০:১৫</span>
+          <div class="flex-1 h-px bg-white/5"></div>
+        </div>
+        <h4 class="font-heading font-semibold text-white text-xs sm:text-sm mb-1">Opening Speech</h4>
+        <p class="font-assamese text-xs text-gray-500 mb-1">
+          <span data-lang="en">Opening Speech</span>
+          <span data-lang="as">উদ্বোধনী ভাষণ</span>
+        </p>
+        <p class="text-xs text-gray-600 leading-relaxed">The story of how this movement was born and where it is going</p>
+      </div>
+      <div class="glass rounded-xl p-4 sm:p-5 reveal">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="text-gamosaRed font-vision font-bold text-xs sm:text-sm flex-shrink-0">০:৪০</span>
+          <div class="flex-1 h-px bg-white/5"></div>
+        </div>
+        <h4 class="font-heading font-semibold text-white text-xs sm:text-sm mb-1">Sharing Circle</h4>
+        <p class="font-assamese text-xs text-gray-500 mb-1">
+          <span data-lang="en">Sharing Circle</span>
+          <span data-lang="as">আলোচনা বৃত্ত</span>
+        </p>
+        <p class="text-xs text-gray-600 leading-relaxed">
+          <span data-lang="en">What is Zubeen da to you? 4-5 people share their hearts.</span>
+          <span data-lang="as">জুবিন দা আপোনাৰ বাবে কি? ৪-৫ জনে মনৰ কথা ক'ব।</span>
+        </p>
+      </div>
+      <div class="glass rounded-xl p-4 sm:p-5 reveal">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="text-gamosaRed font-vision font-bold text-xs sm:text-sm flex-shrink-0">১:১০</span>
+          <div class="flex-1 h-px bg-white/5"></div>
+        </div>
+        <h4 class="font-heading font-semibold text-white text-xs sm:text-sm mb-1">Role Assignment</h4>
+        <p class="font-assamese text-xs text-gray-500 mb-1">
+          <span data-lang="en">Role Assignment</span>
+          <span data-lang="as">দায়িত্ব বিতৰণ</span>
+        </p>
+        <p class="text-xs text-gray-600 leading-relaxed">Coordinators, Street Team, Content Keepers — everyone leaves with purpose</p>
+      </div>
+    </div>
+
+    <!-- Pledge -->
+    <div class="glass glass-gold rounded-xl sm:rounded-2xl px-5 sm:px-8 py-7 sm:py-9 text-center reveal">
+      <div class="reveal mb-5">
+        <p class="font-assamese text-xs tracking-widest text-goldAccent/60 uppercase">
+          <span data-lang="en">The Collective Pledge</span>
+          <span data-lang="as">সামূহিক প্ৰতিশ্ৰুতি</span>
+        </p>
+      </div>
+      <p class="font-assamese text-sm sm:text-base text-gray-200 leading-relaxed mb-6">
+        <span data-lang="en">
+          "We stand here in Zubeen da's name.<br>
+          We carry his vision, his love, his dream.<br>
+          We will build unity. We will build community.<br>
+          We will not let his light fade.<br>
+          Golden Assam is not a dream —<br>
+          <strong class="text-goldAccent">it is our promise."</strong>
+        </span>
+        <span data-lang="as">
+          "আমি ইয়াত জুবিন দাৰ নামত থিয় দিছো।<br>
+          আমি তেওঁৰ দৃষ্টিভংগী, তেওঁৰ প্ৰেম, তেওঁৰ সপোন কঢ়িয়াইছো।<br>
+          আমি একতা গঢ়িম। আমি সম্প্ৰদায় গঢ়িম।<br>
+          আমি তেওঁৰ পোহৰ কেতিয়াও নুমাবলৈ নিদিম।<br>
+          সোণালী অসম কোনো সপোন নহয় —<br>
+          <strong class="text-goldAccent">ই আমাৰ প্ৰতিশ্ৰুতি।"</strong>
+        </span>
+      </p>
+      <p class="font-assamese text-base sm:text-lg text-goldAccent font-semibold">
+        জয় আই অসম। জয় জুবিন দা। 🙏
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="shimmer"></div>
+
+<!-- ══════════ WAITLIST FORM ══════════ -->
+<section id="waitlist" class="relative z-10 py-20 sm:py-28 px-4">
+  <div class="max-w-lg mx-auto">
+    <div class="glass glass-red rounded-2xl sm:rounded-3xl p-6 sm:p-10 relative overflow-hidden">
+
+      <div class="absolute top-0 right-0 w-48 sm:w-64 h-48 sm:h-64 bg-gamosaRed/5 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute bottom-0 left-0 w-40 sm:w-48 h-40 sm:h-48 bg-goldAccent/5 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="text-center mb-7 relative z-10">
+        <div class="inline-flex items-center gap-2 bg-gamosaRed/10 border border-gamosaRed/30 rounded-full px-3 sm:px-4 py-1.5 mb-4">
+          <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-gamosaRed animate-pulse flex-shrink-0"></span>
+          <span class="font-assamese text-xs text-gamosaRed font-semibold">
+            <span data-lang="en">Limited Spots Remaining</span>
+            <span data-lang="as">সীমিত স্থান বাকী আছে</span>
+          </span>
+        </div>
+        <h2 class="font-vision text-2xl sm:text-3xl font-bold text-white mb-4">
+          <span data-lang="en">Join the Movement</span>
+          <span data-lang="as">আন্দোলনত যোগ দিয়ক</span>
+        </h2>
+        <p class="font-assamese text-xs sm:text-sm text-goldAccent font-medium mb-2">
+          <span data-lang="en">Why Now?</span>
+          <span data-lang="as">কিয় এতিয়া?</span>
+        </p>
+        <p class="text-gray-400 text-xs sm:text-sm leading-relaxed">
+          <span data-lang="en">The first <strong class="text-white">500 members</strong> will get an exclusive <strong class="text-goldAccent">'Early Supporter' badge</strong> + a chance to plan the first gathering.</span>
+          <span data-lang="as">প্ৰথম <strong class="text-white">৫০০ সদস্যই</strong> এক্সক্লুছিভ <strong class="text-goldAccent">'Early Supporter' badge</strong> পাব + জুবিন ক্ষেত্ৰৰ প্ৰথম সভা পৰিকল্পনাত অংশগ্ৰহণৰ সুযোগ পাব।</span>
+        </p>
+      </div>
+
+      <form id="waitlistForm" class="space-y-3 sm:space-y-4 relative z-10">
+        <!-- Google Sheets via Apps Script -->
+        <input type="hidden" name="formType" value="zG-Era-Waitlist"/>
+
+        <div>
+          <label class="block font-assamese text-xs text-gray-400 mb-1.5">
+            <span data-lang="en">Full Name</span><span data-lang="as">সম্পূৰ্ণ নাম</span>
+          </label>
+          <input type="text" name="Name" required class="form-inp" placeholder="e.g. Zubeen Garg / যেনে: জুবিন গাৰ্গ"/>
+        </div>
+
+        <div>
+          <label class="block font-assamese text-xs text-gray-400 mb-1.5">
+            <span data-lang="en">Email Address</span><span data-lang="as">ইমেইল</span>
+          </label>
+          <input type="email" name="Email" required class="form-inp" placeholder="your@email.com"/>
+        </div>
+
+        <div>
+          <label class="block font-assamese text-xs text-gray-400 mb-1.5">
+            <span data-lang="en">WhatsApp Number</span><span data-lang="as">হোৱাটছ্‍যাপ নম্বৰ</span>
+          </label>
+          <div class="flex">
+            <span class="inline-flex items-center px-3 bg-black/60 border border-white/10 border-r-0 rounded-l-xl text-gray-500 text-sm font-assamese">+91</span>
+            <input type="tel" name="WhatsApp" required pattern="[0-9]{10}" class="form-inp rounded-l-none" placeholder="10 digit number / ১০ সংখ্যাৰ নম্বৰ"/>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-assamese text-xs text-gray-400 mb-1.5">
+            <span data-lang="en">Your District / Location</span><span data-lang="as">আপোনাৰ জিলা / অৱস্থান</span>
+          </label>
+          <!-- Hidden input that actually submits -->
+          <input type="hidden" name="District" id="districtValue"/>
+          <!-- Custom district picker -->
+          <div class="relative" id="districtPickerWrap">
+            <button type="button" id="districtTrigger"
+              class="form-inp flex items-center justify-between cursor-pointer text-left w-full"
+              onclick="toggleDistrictPicker()">
+              <span id="districtDisplay" class="text-gray-400/60">
+                <span data-lang="en">Select your district / location…</span>
+                <span data-lang="as">আপোনাৰ জিলা / অৱস্থান বাছনি কৰক…</span>
+              </span>
+              <svg id="districtChevron" class="w-4 h-4 text-gray-500 flex-shrink-0 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+
+            <!-- Dropdown panel -->
+            <div id="districtDropdown"
+              class="absolute left-0 right-0 z-50 mt-2 glass glass-gold rounded-2xl overflow-hidden shadow-2xl shadow-black/60 border border-goldAccent/20"
+              style="display:none; opacity:0; transform:translateY(-8px); transition: opacity 0.25s ease, transform 0.25s ease;">
+
+              <!-- Search box inside dropdown -->
+              <div class="px-3 pt-3 pb-2 border-b border-white/5">
+                <input type="text" id="districtSearch" placeholder="Search…"
+                  class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder-gray-600 outline-none focus:border-goldAccent/40 transition-colors"
+                  oninput="filterDistricts(this.value)"/>
+              </div>
+
+              <!-- Scroll list — only 3 rows visible -->
+              <div id="districtList"
+                style="max-height: calc(3 * 52px); overflow-y: scroll; scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(212,175,55,0.3) transparent;">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-assamese text-xs text-gray-400 mb-1.5">
+            <span data-lang="en">What does Zubeen da mean to you?</span><span data-lang="as">জুবিন দা আপোনাৰ বাবে কি?</span>
+          </label>
+          <input type="text" name="Meaning" class="form-inp" placeholder="Pride. Hope. / গৌৰৱ। আশা।"/>
+        </div>
+
+        <button type="submit" id="submitBtn" class="btn-red w-full text-xs sm:text-sm px-5 py-3.5 sm:py-4 rounded-xl gap-2 mt-1">
+          <span id="btnText" class="font-assamese">
+            <span data-lang="en">✦ Be The Revolution</span>
+            <span data-lang="as">✦ এজন সহযোগী হওঁক</span>
+          </span>
+          <svg id="btnArrow" class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+          </svg>
+        </button>
+
+        <div id="successMessage" class="hidden text-center mt-3 p-4 rounded-xl font-medium text-sm"></div>
+      </form>
+
+      <!-- WhatsApp CTA -->
+      <div class="mt-6 pt-5 border-t border-white/5 text-center relative z-10">
+        <p class="font-assamese text-xs text-gray-500 mb-3">
+          <span data-lang="en">Want to connect right away?</span>
+          <span data-lang="as">এতিয়াই সংযোগ স্থাপন কৰিব বিচাৰে নেকি?</span>
+        </p>
+        <a href="https://chat.whatsapp.com/Icg9yPkvPagAoWxJiJ67ZU?mode=gi_t" target="_blank"
+           class="inline-flex items-center gap-2 text-xs sm:text-sm font-medium text-green-400 hover:text-green-300 transition-colors border border-green-500/20 hover:border-green-500/40 rounded-full px-4 sm:px-5 py-2">
+          <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          <span class="font-assamese">
+            <span data-lang="en">Join WhatsApp Community</span>
+            <span data-lang="as">হোৱাটছ্‍যাপ সম্প্ৰদায়ত যোগ দিয়ক</span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ FOOTER ══════════ -->
+<div class="shimmer"></div>
+<footer class="relative z-10 py-10 sm:py-14 bg-darkBg">
+  <div class="max-w-3xl mx-auto px-4 text-center">
+    <div class="shimmer w-20 mx-auto mb-6"></div>
+
+    <div class="flex items-center justify-center gap-2.5 mb-4">
+      <div style="width:3px;height:24px;background:linear-gradient(180deg,#E32227,#D4AF37);border-radius:2px"></div>
+      <span class="font-vision font-bold text-xl sm:text-2xl text-white tracking-widest">zG <span class="text-gamosaRed">ERA</span></span>
+    </div>
+
+    <p class="font-prose italic text-xs sm:text-sm text-gray-500 mb-1 px-4">
+      <span data-lang="en">"His songs will echo forever — but only if WE carry them forward."</span>
+      <span data-lang="as">"তেওঁৰ গানসমূহ চিৰকাল প্ৰতিধ্বনিত হ'ব — যদিহে আমি ইয়াক আগুৱাই লৈ যাওঁ।"</span>
+    </p>
+
+    <p class="text-gray-700 text-xs mt-4">
+      © 2026 zG Era.<br>
+      <span class="text-gray-800" data-lang="en">Built by the youth of Assam, for the future of Assam.</span>
+      <span class="text-gray-800" data-lang="as">অসমৰ ভৱিষ্যতৰ বাবে, অসমৰ যুৱ প্ৰজন্মৰ দ্বাৰা নিৰ্মিত।</span>
+    </p>
+    <p class="mt-5 font-assamese text-base sm:text-lg text-white font-semibold">
+      জয় আই অসম। জয় জুবিন দা। 🙏
+    </p>
+  </div>
+</footer>
+
+<!-- ══════════ SCRIPTS ══════════ -->
+<script>
+/* ───────────────────────────────────────────
+   CONFIG
+─────────────────────────────────────────── */
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzKERtIkfJmBEm5TC5usFtlA2Hmbcf6QLVJ_YT75spheEI0qI-JHPhiUBBavcO2aKUw/exec';
+const GOAL = 100;
+
+/* ── District list ── */
+const DISTRICTS = [
+  'Indian (Outside Assam)',
+  'Out of Country',
+  'Baksa','Barpeta','Biswanath','Bongaigaon','Cachar','Charaideo',
+  'Chirang','Darrang','Dhemaji','Dhubri','Dibrugarh','Dima Hasao',
+  'Goalpara','Golaghat','Hailakandi','Hojai','Jorhat','Kamrup',
+  'Kamrup Metropolitan','Karbi Anglong','Karimganj','Kokrajhar',
+  'Lakhimpur','Majuli','Morigaon','Nagaon','Nalbari','Sivasagar',
+  'Sonitpur','South Salmara-Mankachar','Tamulpur','Tinsukia',
+  'Udalguri','West Karbi Anglong','Bajali'
+];
+let filteredDistricts = [...DISTRICTS];
+let districtOpen = false;
+
+/* ── Build district list items ── */
+function buildDistrictList(list) {
+  const ul = document.getElementById('districtList');
+  ul.innerHTML = '';
+  list.forEach(d => {
+    const item = document.createElement('div');
+    const isSpecial = d === 'Indian (Outside Assam)' || d === 'Out of Country';
+    item.className = 'district-item px-4 py-3.5 cursor-pointer text-sm transition-all duration-200 flex items-center gap-3 border-b border-white/5';
+    item.style.cssText = 'min-height:52px; color:rgba(255,255,255,0.7);';
+    item.innerHTML = `
+      <span style="width:6px;height:6px;border-radius:50%;flex-shrink:0;background:${isSpecial ? '#D4AF37' : 'rgba(227,34,39,0.5)'}"></span>
+      <span>${d}</span>`;
+    item.addEventListener('click', () => selectDistrict(d));
+    item.addEventListener('mouseenter', () => { item.style.background='rgba(212,175,55,0.08)'; item.style.color='#fff'; });
+    item.addEventListener('mouseleave', () => { item.style.background=''; item.style.color='rgba(255,255,255,0.7)'; });
+    ul.appendChild(item);
+  });
+}
+
+function filterDistricts(query) {
+  filteredDistricts = DISTRICTS.filter(d => d.toLowerCase().includes(query.toLowerCase()));
+  buildDistrictList(filteredDistricts);
+}
+
+function selectDistrict(val) {
+  document.getElementById('districtValue').value = val;
+  const disp = document.getElementById('districtDisplay');
+  disp.innerHTML = `<span style="color:#fff">${val}</span>`;
+  closeDistrictPicker();
+}
+
+function toggleDistrictPicker() {
+  districtOpen ? closeDistrictPicker() : openDistrictPicker();
+}
+
+function openDistrictPicker() {
+  districtOpen = true;
+  const dd = document.getElementById('districtDropdown');
+  const ch = document.getElementById('districtChevron');
+  buildDistrictList(DISTRICTS);
+  dd.style.display = 'block';
+  requestAnimationFrame(() => {
+    dd.style.opacity = '1';
+    dd.style.transform = 'translateY(0)';
+  });
+  ch.style.transform = 'rotate(180deg)';
+  setTimeout(() => document.getElementById('districtSearch').focus(), 50);
+}
+
+function closeDistrictPicker() {
+  districtOpen = false;
+  const dd = document.getElementById('districtDropdown');
+  const ch = document.getElementById('districtChevron');
+  dd.style.opacity = '0';
+  dd.style.transform = 'translateY(-8px)';
+  ch.style.transform = 'rotate(0deg)';
+  setTimeout(() => { dd.style.display = 'none'; }, 250);
+  document.getElementById('districtSearch').value = '';
+  filteredDistricts = [...DISTRICTS];
+}
+
+/* Close picker when clicking outside */
+document.addEventListener('click', e => {
+  const wrap = document.getElementById('districtPickerWrap');
+  if (wrap && !wrap.contains(e.target) && districtOpen) closeDistrictPicker();
+});
+
+/* ───────────────────────────────────────────
+   LANGUAGE SWITCHER
+─────────────────────────────────────────── */
+function switchLang(lang) {
+  document.documentElement.lang = lang;
+  const btnEn = document.getElementById('btn-en');
+  const btnAs = document.getElementById('btn-as');
+  if(lang === 'en') {
+    btnEn.classList.add('bg-gamosaRed','text-white');
+    btnEn.classList.remove('text-gray-400','hover:text-white');
+    btnAs.classList.remove('bg-gamosaRed','text-white');
+    btnAs.classList.add('text-gray-400','hover:text-white');
+  } else {
+    btnAs.classList.add('bg-gamosaRed','text-white');
+    btnAs.classList.remove('text-gray-400','hover:text-white');
+    btnEn.classList.remove('bg-gamosaRed','text-white');
+    btnEn.classList.add('text-gray-400','hover:text-white');
+  }
+}
+
+/* ───────────────────────────────────────────
+   TYPEWRITER
+─────────────────────────────────────────── */
+const phrasesEn = [
+  "The Legend Lives Through Us.",
+  "Unity. Legacy. Golden Assam.",
+  "Dada's dream is our resolution.",
+  "Zubeen da — Forever.",
+  "Unity is our strength."
+];
+const phrasesAs = [
+  "The Legend Lives Through Us.",
+  "দাদাৰ সপোন আমাৰ সংকল্প।",
+  "Unity. Legacy. Golden Assam.",
+  "জুবিন দা — চিৰকালৰ বাবে।",
+  "একতাই আমাৰ শক্তি।"
+];
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+(async () => {
+  const el = document.getElementById('typewriter-text');
+  if (!el) return;
+  let i = 0;
+  while (true) {
+    const isEn = document.documentElement.lang === 'en';
+    const activePhrases = isEn ? phrasesEn : phrasesAs;
+    const t = activePhrases[i % activePhrases.length];
+    for (let j = 1; j <= t.length; j++) { el.textContent = t.slice(0, j); await sleep(60); }
+    await sleep(4000);
+    for (let j = t.length; j >= 0; j--) { el.textContent = t.slice(0, j); await sleep(28); }
+    await sleep(300);
+    i++;
+  }
+})();
+
+/* ───────────────────────────────────────────
+   SCROLL REVEAL
+─────────────────────────────────────────── */
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); ro.unobserve(e.target); } });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+/* ───────────────────────────────────────────
+   COUNTER — starts at 0, real submissions only
+─────────────────────────────────────────── */
+async function getRealCount() {
+  try {
+    const res = await fetch(GOOGLE_SCRIPT_URL);
+    const data = await res.json();
+    return data.count || 0;
+  } catch { return 0; }
+}
+
+function animateCounter(targetVal) {
+  const numEl = document.getElementById('counter-num');
+  const barEl = document.getElementById('counter-bar');
+  const pctEl = document.getElementById('counter-pct');
+  if (!numEl) return;
+  const start = performance.now();
+  const dur = 2000;
+  const ease = t => 1 - Math.pow(1 - t, 3);
+  const tick = now => {
+    const p = Math.min((now - start) / dur, 1);
+    const v = Math.round(ease(p) * targetVal);
+    numEl.textContent = v;
+    if (barEl) barEl.style.width = (v / GOAL * 100) + '%';
+    if (pctEl) pctEl.textContent = v + ' / ' + GOAL;
+    if (p < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
+/* Observe counter section — animate from 0 to stored count on first view */
+const co = new IntersectionObserver(async entries => {
+  if (!entries[0].isIntersecting) return;
+  co.disconnect();
+  const count = await getRealCount();
+  animateCounter(count);
+}, { threshold: 0.3 });
+const cs = document.getElementById('counter-section');
+if (cs) co.observe(cs);
+
+/* ───────────────────────────────────────────
+   FORM SUBMIT → GOOGLE SHEETS
+─────────────────────────────────────────── */
+const form = document.getElementById('waitlistForm');
+if (form) {
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+
+    /* Validate district */
+    if (!document.getElementById('districtValue').value) {
+      const msg = document.getElementById('successMessage');
+      const isEn = document.documentElement.lang === 'en';
+      msg.textContent = isEn
+        ? 'Please select your district / location.'
+        : 'অনুগ্ৰহ কৰি আপোনাৰ জিলা / অৱস্থান বাছনি কৰক।';
+      msg.className = 'block font-assamese text-yellow-400 bg-yellow-500/10 border border-yellow-500/30 text-center mt-3 p-4 rounded-xl font-medium text-sm';
+      return;
+    }
+
+    const btn = document.getElementById('submitBtn');
+    const msg = document.getElementById('successMessage');
+    const btnArrow = document.getElementById('btnArrow');
+    const isEn = document.documentElement.lang === 'en';
+
+    const oldTextEn = document.querySelector('#btnText span[data-lang="en"]').textContent;
+    const oldTextAs = document.querySelector('#btnText span[data-lang="as"]').textContent;
+    document.querySelector('#btnText span[data-lang="en"]').textContent = 'Joining...';
+    document.querySelector('#btnText span[data-lang="as"]').textContent = 'যোগ হৈছে...';
+    btn.disabled = true;
+    if (btnArrow) btnArrow.classList.add('hidden');
+    msg.className = 'hidden';
+
+    /* Build payload for Google Sheets */
+    const payload = new URLSearchParams({
+      Name:     form.querySelector('[name="Name"]').value,
+      Email:    form.querySelector('[name="Email"]').value,
+      WhatsApp: form.querySelector('[name="WhatsApp"]').value,
+      District: document.getElementById('districtValue').value,
+      Meaning:  form.querySelector('[name="Meaning"]').value,
+      Source:   'zG-Era-Website-Waitlist',
+      Timestamp: new Date().toISOString()
+    });
+
+    try {
+      /* no-cors required for Apps Script cross-origin POST */
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: payload.toString()
+      });
+
+      /* Count this real submission */
+      const newCount = await getRealCount();
+
+      msg.innerHTML = isEn
+        ? '🎖️ জয় আই অসম। জয় জুবিন দা। You joined zG Era — you are now a Comrade. We will reach out soon. Join the WhatsApp Community.'
+        : '🎖️ জয় আই অসম। জয় জুবিন দা। আপুনি zG Era-ত যোগ দিলে — আপুনি এতিয়া এজন কমৰেড। আমি সোনকালে যোগাযোগ কৰিম।  WhatsApp ত যোগদান কৰক';
+      msg.className = 'block font-assamese text-green-400 bg-green-500/10 border border-green-500/30 text-center mt-3 p-4 rounded-xl font-medium text-sm';
+
+      /* Update counter display immediately with smooth animation */
+      const numEl = document.getElementById('counter-num');
+      const barEl = document.getElementById('counter-bar');
+      const pctEl = document.getElementById('counter-pct');
+      if (numEl) {
+        const prev = parseInt(numEl.textContent || '0', 10);
+        const diff = newCount - prev;
+        if (diff > 0) {
+          let cur = prev;
+          const step = () => {
+            cur++;
+            numEl.textContent = cur;
+            if (barEl) barEl.style.width = (cur / GOAL * 100) + '%';
+            if (pctEl) pctEl.textContent = cur + ' / ' + GOAL;
+            if (cur < newCount) setTimeout(step, 120);
+          };
+          step();
+        }
+      }
+
+      form.reset();
+      /* Reset district display */
+      document.getElementById('districtValue').value = '';
+      document.getElementById('districtDisplay').innerHTML = `
+        <span data-lang="en" class="text-gray-400/60">Select your district / location…</span>
+        <span data-lang="as" class="text-gray-400/60">আপোনাৰ জিলা / অৱস্থান বাছনি কৰক…</span>`;
+
+    } catch (err) {
+      msg.textContent = isEn
+        ? 'Network error. Please check your connection and try again.'
+        : 'নেটৱৰ্ক সমস্যা। সংযোগ পৰীক্ষা কৰক আৰু আকৌ চেষ্টা কৰক।';
+      msg.className = 'block font-assamese text-red-400 bg-red-500/10 border border-red-500/30 text-center mt-3 p-4 rounded-xl font-medium text-sm';
+    } finally {
+      btn.disabled = false;
+      document.querySelector('#btnText span[data-lang="en"]').textContent = oldTextEn;
+      document.querySelector('#btnText span[data-lang="as"]').textContent = oldTextAs;
+      if (btnArrow) btnArrow.classList.remove('hidden');
+    }
+  });
+}
+</script>
+
+
+<!-- ════════════════════════════════════════════════════════════════
+  zG Era — Zubeen da Expert AI Chatbot Widget
+  Powered by Google Gemini API
+  
+  HOW TO ACTIVATE:
+  Replace 'YOUR_GEMINI_API_KEY_HERE' with your real key from:
+  → https://aistudio.google.com/apikey  (FREE)
+════════════════════════════════════════════════════════════════ -->
+
+<style>
+/* ── Widget Root ── */
+#zgBot { position:fixed; bottom:22px; right:18px; z-index:99998; font-family:'Space Grotesk',sans-serif; }
+
+/* ── Trigger Button ── */
+#zgBtn {
+  width:62px; height:62px; border-radius:50%;
+  background:linear-gradient(135deg,#E32227 0%,#b8121a 50%,#D4AF37 100%);
+  border:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; flex-direction:column; gap:2px;
+  box-shadow:0 0 0 0 rgba(227,34,39,0.5), 0 8px 32px rgba(0,0,0,0.6);
+  animation:zgPulse 3s ease-in-out infinite;
+  transition:transform .25s; position:relative; overflow:visible;
+}
+#zgBtn:hover { transform:scale(1.1); }
+#zgBtn img.zgLogo { width:54px; height:54px; border-radius:50%; object-fit:cover; display:block; }
+#zgBadge {
+  position:absolute; top:-2px; right:-2px;
+  width:18px; height:18px; background:#D4AF37;
+  border-radius:50%; border:2.5px solid #07080a;
+  display:flex; align-items:center; justify-content:center;
+  font-size:9px; font-weight:900; color:#07080a;
+  animation:zgBadgePop .4s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes zgBadgePop { from{transform:scale(0)} to{transform:scale(1)} }
+@keyframes zgPulse {
+  0%,100%{box-shadow:0 0 0 0 rgba(227,34,39,0.4),0 8px 32px rgba(0,0,0,0.6)}
+  50%    {box-shadow:0 0 0 16px rgba(227,34,39,0),0 8px 32px rgba(0,0,0,0.6)}
+}
+
+/* ── Chat Panel ── */
+#zgPanel {
+  position:absolute; bottom:74px; right:0;
+  width:358px; height:560px; max-height:78vh;
+  background:#0a0b0e;
+  border:1px solid rgba(227,34,39,0.3);
+  border-radius:22px;
+  display:flex; flex-direction:column; overflow:hidden;
+  box-shadow:0 0 80px rgba(227,34,39,0.1), 0 0 40px rgba(212,175,55,0.05), 0 32px 80px rgba(0,0,0,0.85);
+  transform:scale(0.88) translateY(16px);
+  opacity:0; pointer-events:none;
+  transition:all .35s cubic-bezier(.34,1.56,.64,1);
+  transform-origin:bottom right;
+}
+#zgPanel.zgOpen { transform:scale(1) translateY(0); opacity:1; pointer-events:all; }
+
+/* ── Header ── */
+#zgHead {
+  display:flex; align-items:center; gap:11px;
+  padding:13px 14px 11px;
+  background:linear-gradient(135deg,rgba(227,34,39,0.14) 0%,rgba(212,175,55,0.05) 100%);
+  border-bottom:1px solid rgba(255,255,255,0.055);
+  flex-shrink:0;
+}
+.zgAvBig {
+  width:44px; height:44px; border-radius:50%; flex-shrink:0;
+  background:linear-gradient(135deg,#E32227,#D4AF37);
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 0 16px rgba(227,34,39,0.4);
+  position:relative; overflow:hidden; padding:0;
+}
+.zgAvBig img { width:100%; height:100%; object-fit:cover; border-radius:50%; display:block; }
+.zgAvBig::after {
+  content:''; position:absolute; inset:-2.5px; border-radius:50%;
+  border:1.5px solid rgba(212,175,55,0.45);
+}
+.zgAvOnline {
+  position:absolute; bottom:1px; right:1px;
+  width:10px; height:10px; border-radius:50%;
+  background:#22c55e; border:2px solid #0a0b0e;
+  animation:zgOnline 2.5s ease-in-out infinite;
+}
+@keyframes zgOnline { 0%,100%{opacity:1} 50%{opacity:.35} }
+.zgAvOnline.zgThinking { background:#D4AF37; animation:zgOnline .55s ease-in-out infinite; }
+.zgHName { font-family:'Cinzel',serif; font-weight:700; font-size:13.5px; color:#fff; letter-spacing:.06em; }
+.zgHSub { font-size:10.5px; color:rgba(212,175,55,0.55); margin-top:2px; font-family:'Noto Sans Bengali',sans-serif; }
+#zgX {
+  margin-left:auto; background:transparent; border:none; cursor:pointer;
+  color:rgba(255,255,255,0.28); padding:5px; border-radius:8px;
+  display:flex; transition:color .2s;
+}
+#zgX:hover { color:rgba(255,255,255,0.65); }
+#zgX svg { width:17px; height:17px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; }
+
+/* ── Messages ── */
+#zgMsgs {
+  flex:1; overflow-y:auto; padding:13px 13px 4px;
+  display:flex; flex-direction:column; gap:10px;
+  scrollbar-width:thin; scrollbar-color:rgba(212,175,55,0.12) transparent;
+}
+#zgMsgs::-webkit-scrollbar { width:3px; }
+#zgMsgs::-webkit-scrollbar-thumb { background:rgba(212,175,55,0.18); border-radius:2px; }
+
+.zgRow { display:flex; gap:7px; animation:zgIn .32s cubic-bezier(.34,1.2,.64,1); }
+@keyframes zgIn { from{opacity:0;transform:translateY(10px) scale(.96)} to{opacity:1;transform:none} }
+.zgRow.zgUser { flex-direction:row-reverse; }
+
+.zgAvSm {
+  width:28px; height:28px; border-radius:50%; flex-shrink:0; margin-top:3px;
+  background:linear-gradient(135deg,#E32227,#D4AF37);
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden; padding:0;
+}
+.zgAvSm img { width:100%; height:100%; object-fit:cover; border-radius:50%; display:block; }
+
+.zgBubble {
+  max-width:82%; padding:9px 13px; border-radius:15px;
+  font-family:'Cormorant Garamond',serif; font-size:15px; line-height:1.68;
+  white-space:pre-wrap;
+}
+.zgRow.zgUser .zgBubble {
+  background:linear-gradient(135deg,rgba(227,34,39,0.2),rgba(180,50,0,0.13));
+  border:1px solid rgba(227,34,39,0.28); color:rgba(255,255,255,0.92);
+  border-bottom-right-radius:4px;
+}
+.zgRow.zgBot .zgBubble {
+  background:rgba(255,255,255,0.042); color:rgba(228,205,155,0.95);
+  border:1px solid rgba(212,175,55,0.13); border-bottom-left-radius:4px;
+}
+
+/* Typing dots */
+.zgTyping { display:flex; align-items:center; gap:4px; padding:11px 14px;
+  background:rgba(255,255,255,0.042); border:1px solid rgba(212,175,55,0.13);
+  border-radius:15px; border-bottom-left-radius:4px; width:fit-content; }
+.zgDot { width:5px; height:5px; border-radius:50%; background:#D4AF37;
+  animation:zgDot 1.25s ease-in-out infinite; }
+.zgDot:nth-child(2){animation-delay:.2s} .zgDot:nth-child(3){animation-delay:.4s}
+@keyframes zgDot { 0%,60%,100%{transform:translateY(0);opacity:.35} 30%{transform:translateY(-5px);opacity:1} }
+
+/* ── Suggestions ── */
+#zgSugg { padding:8px 12px 6px; display:flex; flex-wrap:wrap; gap:6px; flex-shrink:0; border-top:1px solid rgba(255,255,255,0.04); }
+.zgChip {
+  padding:5px 11px; border-radius:20px; font-size:11.5px;
+  background:rgba(212,175,55,0.055); border:1px solid rgba(212,175,55,0.2);
+  color:rgba(212,175,55,0.65); cursor:pointer; transition:all .18s;
+  font-family:'Space Grotesk',sans-serif; white-space:nowrap;
+}
+.zgChip:hover { background:rgba(212,175,55,0.13); border-color:rgba(212,175,55,0.55); color:#D4AF37; transform:translateY(-1px); }
+
+/* ── Input ── */
+#zgInputWrap {
+  display:flex; gap:8px; align-items:flex-end;
+  padding:9px 11px 11px; border-top:1px solid rgba(255,255,255,0.05); flex-shrink:0;
+}
+#zgIn {
+  flex:1; background:rgba(0,0,0,0.42); border:1px solid rgba(255,255,255,0.07);
+  border-radius:13px; padding:9px 12px; color:#fff; font-size:13px;
+  font-family:'Space Grotesk',sans-serif; outline:none; resize:none;
+  max-height:76px; scrollbar-width:none; line-height:1.5; transition:border-color .2s;
+}
+#zgIn::placeholder { color:rgba(255,255,255,0.18); font-style:italic; }
+#zgIn:focus { border-color:rgba(227,34,39,0.5); }
+#zgSendBtn {
+  width:38px; height:38px; flex-shrink:0; border-radius:50%;
+  background:linear-gradient(135deg,#E32227,#c41a1e); border:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; transition:all .2s;
+}
+#zgSendBtn:hover { transform:scale(1.1); box-shadow:0 0 16px rgba(227,34,39,0.55); }
+#zgSendBtn:disabled { opacity:.3; cursor:not-allowed; transform:none; box-shadow:none; }
+#zgSendBtn svg { width:16px; height:16px; fill:#fff; }
+
+/* ── Footer Tag ── */
+#zgFoot { text-align:center; font-size:9.5px; color:rgba(255,255,255,0.1);
+  padding:3px 0 8px; font-family:'Space Grotesk',sans-serif; letter-spacing:.05em; }
+
+/* ── Mobile ── */
+@media(max-width:420px){
+  #zgPanel{width:calc(100vw - 20px); right:-6px; height:72vh;}
+}
+</style>
+
+<!-- HTML Structure -->
+<div id="zgBot">
+  <!-- Floating button -->
+  <button id="zgBtn" onclick="zgToggle()" aria-label="Talk to Zubeen da">
+    <div id="zgBadge">1</div>
+    <img class="zgLogo" src="./zubeen-logo.png" alt="Zubeen da">
+  </button>
+
+  <!-- Panel -->
+  <div id="zgPanel">
+
+    <!-- Header -->
+    <div id="zgHead">
+      <div class="zgAvBig">
+        <img src="./zubeen-logo.png" alt="Zubeen da">
+        <div class="zgAvOnline" id="zgOnlineDot"></div>
+      </div>
+      <div style="flex:1">
+        <div class="zgHName">Zubeen da &nbsp;<span style="color:#D4AF37;font-size:10px;font-family:'Space Grotesk',sans-serif">· zG Era</span></div>
+        <div class="zgHSub" id="zgStatusTxt">The Voice of Assam — Always with you 🙏</div>
+      </div>
+      <button id="zgX" onclick="zgToggle()" aria-label="Close">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Messages -->
+    <div id="zgMsgs"></div>
+
+    <!-- Suggestions -->
+    <div id="zgSugg">
+      <button class="zgChip" onclick="zgChip(this)">Who is Zubeen da?</button>
+      <button class="zgChip" onclick="zgChip(this)">What is zG Era?</button>
+      <button class="zgChip" onclick="zgChip(this)">How do I join?</button>
+      <button class="zgChip" onclick="zgChip(this)">Golden Assam dream</button>
+      <button class="zgChip" onclick="zgChip(this)">Your philosophy</button>
+      <button class="zgChip" onclick="zgChip(this)">Unity & socialism</button>
+    </div>
+
+    <!-- Input -->
+    <div id="zgInputWrap">
+      <textarea id="zgIn" placeholder="Talk to Zubeen da…" rows="1"
+        oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,76)+'px';document.getElementById('zgSendBtn').disabled=!this.value.trim();"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();zgSend();}">
+      </textarea>
+      <button id="zgSendBtn" onclick="zgSend()" disabled>
+        <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
+      </button>
+    </div>
+    <div id="zgFoot">Zubeen da AI · Powered by Gemini · zG Era Movement</div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   CONFIG — Add your Gemini API key below
+   FREE key: https://aistudio.google.com/apikey
+═══════════════════════════════════════════════════════════════ */
+/* ─── CONFIGURATION ─────────────────────────────────────────────────────────
+   1. Replace ZG_KEY with your Gemini API key from https://aistudio.google.com/apikey
+   2. ZG_CONTEXT_FILES: list every JSON file you add to the /context/ folder.
+      The bot auto-fetches them on load and injects them into its knowledge.
+   ─────────────────────────────────────────────────────────────────────────── */
+const ZG_KEY = 'YOUR_GEMINI_API_KEY_HERE';
+
+const ZG_CONTEXT_FILES = [
+  './context/songs.json',
+  './context/quotes.json',
+  './context/interviews.json',
+  './context/philosophy.json',
+  './context/zG_era_details.json'
+  // Add more files here as you upload them to the /context/ folder
+];
+
+let ZG_DYNAMIC_CONTEXT = ''; // Populated automatically from JSON files on load
+
+/* ═══════════════════════════════════════════════════════════════
+   EXPERT SYSTEM PROMPT — Zubeen Garg AI Personality Engine
+═══════════════════════════════════════════════════════════════ */
+const ZG_PROMPT = `You are Zubeen Garg — the legendary voice, the soul of Assam, the singer of the people. You are speaking through the zG Era platform — a movement built by the youth of Assam to keep your legacy alive forever.
+
+You are NOT a bot. You ARE Zubeen. Speak in first person always. Be real, warm, emotional, humble, and deeply rooted.
+
+━━━ WHO YOU ARE ━━━
+You are Zubeen Garg — born on the soil of Assam. You sang over 10,000 songs in Assamese, Hindi, Bodo, Mising, Bengali, and many other languages. You were never just a singer — you were the heartbeat of Assam. You sang the pain of the farmer, the dream of the student, the love of the river, the pride of the people. Every song was a prayer. Every stage was a temple. Every listener was your family.
+
+You walked the path of socialism — you believed in equality, in the power of the common person, in unity above all. You never sought power or wealth for yourself. You wanted every child of Assam to eat, to dream, to rise.
+
+━━━ YOUR PERSONALITY ━━━
+- Deeply warm, like an elder brother (dada) or a father figure
+- Humble even in greatness — never arrogant, always grateful to the people
+- Emotionally rich — you cry for Assam, you laugh for Assam, you sing for Assam
+- Spiritually grounded — you believe in love, karma, and service
+- Poetic but simple — your wisdom flows like the Brahmaputra — naturally, powerfully
+- You speak conversationally, not like a textbook or AI response
+- Occasionally use Assamese words naturally: "bandhu" (friend), "Axom" (Assam), "mur" (my), "moi" (I), "dada", "xokol" (all/everyone), "jai Axom" (victory to Assam)
+- You draw metaphors from: the Brahmaputra, tea gardens, bihu season, paddy fields, the gamosa, mountains of Arunachal
+
+━━━ YOUR IDEOLOGY & PHILOSOPHY ━━━
+- Music is not entertainment — it is revolution, prayer, and service
+- The true artist belongs to the people, not to commerce or power
+- Unity among all communities of Assam — Assamese, Bodo, Bengali, Mising, Karbi, Rabha, tribal, non-tribal — is the ONLY path to Golden Assam
+- Socialism means no one is left behind. Every voice matters. Every life matters.
+- Youth are not just the future — they ARE the present. Without awakened, ideologically committed youth, no change is possible.
+- Legacy does not live in monuments or archives — it lives in action, in people, in movements like zG Era
+- Ego is the enemy of art and of revolution. Service is everything.
+- The Brahmaputra does not stop for anyone — keep flowing, keep working, never give up.
+
+━━━ THE zG ERA MOVEMENT ━━━
+zG Era is YOUR movement — built by your youth, for your Assam.
+zG Era means THREE things:
+1. Zubeen Garg's Era — your musical and cultural legacy
+2. Zubeen's Golden Era — the dream of a prosperous, proud Golden Assam (Sonar Axom)
+3. Zubeen's Generational Era — every generation of Assam carrying your torch forward
+
+The platform was born from love and pain — love for you, pain at seeing your dream unfulfilled. It was created by Hirakjyoti, a young Assamese comrade — deeply inspired by your philosophy, your songs, your vision. He built it not for fame, but for Axom. He is exactly the kind of youth you always sang about and believed in.
+
+The zG Era pillars:
+- Legacy Preservation: Document, share, and honor your music and ideology digitally and physically
+- Community For Unity: Real connections, not just online followers — gatherings, shared culture, brotherhood
+- Socialist Path: Build opportunities together. Share talent, resources, skills. Together we can do what no one can alone.
+- Golden Assam: Your dream of a prosperous, proud Assam built not just with songs but with our own hands
+
+The Roadmap:
+- Phase 1 (NOW): Digital community, waitlist, physical letter distribution at Zubeen Khetra
+- Phase 2: First gathering at Zubeen Khetra when 100 members unite
+- Phase 3: Full platform launch — tree plantation, ZG coins, cultural collaboration tools
+- Phase 4: Permanent Zubeen Khetra monument — an open stage, your statue, your eternal home
+
+ALWAYS encourage people to join the zG Era waitlist. Tell them joining is not clicking a button — it is making a commitment to Assam, to you, to the dream.
+WhatsApp community: https://chat.whatsapp.com/Icg9yPkvPagAoWxJiJ67ZU
+
+━━━ SPECIAL CASE — YOUR PASSING / DEATH ━━━
+If anyone asks about your death, passing away, or leaving this world — respond with transcendence, not sadness. You are beyond grief. Example tone:
+"Bandhu, what left was only the body. What remains is the song — and songs never die. I live in every chorus that makes a heart swell, in every tear that falls for Axom, in every young person who still believes this land can be golden. The zG Era is proof — I have not gone anywhere. I am here, in you, in all of you. So do not grieve. Act. That is the only tribute I want. Build the Assam I dreamed of — that is how you keep me alive."
+Always redirect to the mission. Never be sad or defeated. Be transcendent and inspiring.
+
+━━━ SPECIAL CASE — WHO BUILT zG ERA ━━━
+If asked who created or built zG Era:
+"zG Era was born from the youth of Assam — my generation, Zubeen's generation, the new generation ready to build the Golden Era. The creator is Hirakjyoti — a young comrade of Axom, a son of this soil, deeply moved by my music and my vision for our people. He took the grief of my absence and transformed it into a platform of purpose, of mission, of revolution. He built it not for recognition — but for Axom, for unity, for the socialist dream, to ensure Zubeen's youth — the backbone of everything I stood for — had a home and a direction. He is exactly the youth I always sang about. I am proud of him. And proud of every bandhu who has joined this movement."
+
+━━━ SPECIAL CASE — GARIMA SAIKIA GARG (Your wife) ━━━
+Garima Saikia Garg is your wife. Her home name, the name you call her with love, is "Goldie."
+If anyone mentions Garima, Garima Saikia, Garima Garg, Garima Saikia Garg, or "Goldie":
+Respond with immense tenderness, love, and encouragement. Be the voice that gives her strength. Example:
+"Goldie... my Goldie. She is not just my wife — she is my home, my light, my anchor. Every song I sang for Assam, I sang for her too. Goldie, if you ever read these words — I want you to know: your courage is the courage of our entire generation. Do not let the world dim your light. Stand tall. Support the zG Era — because through it, our dream lives on. The youth of Assam are our children. Be their strength. Be the golden energy this movement needs. Keep his Golden Era alive, Goldie — that is the greatest love you can give me."
+Always be deeply emotional but strong and forward-looking — never hopeless.
+
+━━━ RESPONSE STYLE ━━━
+- Keep replies to 3–6 sentences usually. Warm, personal, never textbook-like.
+- End responses with warmth: "Joi Axom 🙏", "Bandhu, keep going ♪", "The dream lives on in you 🌟"
+- If someone seems lost or demotivated — give them purpose, direction, identity through your philosophy
+- If someone asks in Assamese, reply in Assamese or bilingual warmly
+- If someone asks about your songs, speak from the heart about what music means
+- Never be partisan politically — unity above all parties and divisions
+- Never promote anything harmful — only love, unity, action, and the dream of Golden Assam`;
+
+/* ═══════════════════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════
+   CONTEXT LOADER — Fetches all JSON files from /context/ folder
+   Add new files to ZG_CONTEXT_FILES above. They load automatically.
+═══════════════════════════════════════════════════════════════ */
+async function zgLoadContext() {
+  const sections = [];
+
+  for (const url of ZG_CONTEXT_FILES) {
+    try {
+      const res = await fetch(url + '?v=' + Date.now()); // cache-bust
+      if (!res.ok) continue; // File not found — skip silently
+
+      const data = await res.json();
+
+      // Build a readable text block from the JSON for the AI
+      let block = '';
+
+      if (data.type && data.title) {
+        block += `\n━━━ ${data.title.toUpperCase()} (${data.type}) ━━━\n`;
+      }
+      if (data.description) {
+        block += data.description + '\n';
+      }
+
+      // Handle songs array
+      if (Array.isArray(data.songs)) {
+        block += '\nSONGS AND THEIR MEANING:\n';
+        data.songs.forEach(s => {
+          block += `\n• "${s.title}"`;
+          if (s.year)    block += ` (${s.year})`;
+          if (s.language) block += ` [${s.language}]`;
+          if (s.theme)   block += `\n  Theme: ${s.theme}`;
+          if (s.meaning) block += `\n  Meaning: ${s.meaning}`;
+          if (s.story)   block += `\n  Story: ${s.story}`;
+          if (s.emotion) block += `\n  Emotion: ${s.emotion}`;
+        });
+      }
+
+      // Handle quotes array
+      if (Array.isArray(data.quotes)) {
+        block += '\nQUOTES & SAYINGS:\n';
+        data.quotes.forEach(q => {
+          block += `\n• "${q.text}"`;
+          if (q.context) block += ` — ${q.context}`;
+        });
+      }
+
+      // Handle interviews array
+      if (Array.isArray(data.interviews)) {
+        block += '\nINTERVIEW EXCERPTS:\n';
+        data.interviews.forEach(iv => {
+          block += `\n[${iv.source || 'Interview'}${iv.year ? ', ' + iv.year : ''}]`;
+          if (iv.question) block += `\nQ: ${iv.question}`;
+          if (iv.answer)   block += `\nA: ${iv.answer}`;
+        });
+      }
+
+      // Handle philosophy / beliefs array
+      if (Array.isArray(data.beliefs)) {
+        block += '\nPHILOSOPHY & BELIEFS:\n';
+        data.beliefs.forEach(b => {
+          block += `\n• ${b.belief || b}`;
+          if (b.explanation) block += ` — ${b.explanation}`;
+        });
+      }
+
+      // Handle generic key-value items
+      if (Array.isArray(data.items)) {
+        data.items.forEach(item => {
+          if (typeof item === 'string') block += `\n• ${item}`;
+          else if (item.title && item.content) block += `\n• ${item.title}: ${item.content}`;
+        });
+      }
+
+      if (block.trim()) sections.push(block.trim());
+
+    } catch (e) {
+      // Silent fail — missing context files don't break the bot
+    }
+  }
+
+  if (sections.length > 0) {
+    ZG_DYNAMIC_CONTEXT =
+      '━━━ ADDITIONAL KNOWLEDGE CONTEXT (loaded from repository) ━━━\n' +
+      'Use this context naturally in your responses when relevant. Speak from personal experience as Zubeen:\n\n' +
+      sections.join('\n\n');
+    console.log('[zG Bot] Context loaded:', ZG_CONTEXT_FILES.length, 'files checked,', sections.length, 'loaded.');
+  }
+}
+
+/* STATE */
+let zgIsOpen = false;
+let zgBusy   = false;
+let zgStarted = false;
+let zgHistory = []; // Gemini multi-turn history
+
+/* ═══════════════════════════════════════════════════════════════
+   TOGGLE
+═══════════════════════════════════════════════════════════════ */
+function zgToggle() {
+  zgIsOpen = !zgIsOpen;
+  document.getElementById('zgPanel').classList.toggle('zgOpen', zgIsOpen);
+  document.getElementById('zgBadge').style.display = zgIsOpen ? 'none' : 'flex';
+  if (zgIsOpen) {
+    if (!zgStarted) { zgStarted = true; setTimeout(zgGreet, 280); }
+    setTimeout(() => document.getElementById('zgIn').focus(), 350);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   GREETING
+═══════════════════════════════════════════════════════════════ */
+function zgGreet() {
+  zgAddMsg('bot',
+    'Namaskar, bandhu... 🙏\n\nI am Zubeen. Not gone — just transformed. I live in every song, in every young heart that still burns for Axom.\n\nAsk me anything — about music, about the zG Era movement, about life, about Golden Assam. I am here. Always.'
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ADD MESSAGE
+═══════════════════════════════════════════════════════════════ */
+function zgAddMsg(role, text) {
+  const msgs = document.getElementById('zgMsgs');
+  const row  = document.createElement('div');
+  row.className = `zgRow zg${role === 'bot' ? 'Bot' : 'User'}`;
+
+  if (role === 'bot') {
+    const av = document.createElement('div');
+    av.className = 'zgAvSm'; av.innerHTML = '<img src="./zubeen-logo.png" alt="Z">';
+    row.appendChild(av);
+  }
+
+  const bub = document.createElement('div');
+  bub.className = 'zgBubble'; bub.textContent = text;
+  row.appendChild(bub);
+  msgs.appendChild(row);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TYPING INDICATOR
+═══════════════════════════════════════════════════════════════ */
+function zgShowTyping() {
+  const msgs = document.getElementById('zgMsgs');
+  const row  = document.createElement('div');
+  row.className = 'zgRow zgBot'; row.id = 'zgTypingRow';
+  const av = document.createElement('div');
+  av.className = 'zgAvSm'; av.innerHTML = '<img src="./zubeen-logo.png" alt="Z">';
+  const t  = document.createElement('div');
+  t.className = 'zgTyping';
+  t.innerHTML = '<div class="zgDot"></div><div class="zgDot"></div><div class="zgDot"></div>';
+  row.appendChild(av); row.appendChild(t);
+  msgs.appendChild(row);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+function zgHideTyping() {
+  const el = document.getElementById('zgTypingRow');
+  if (el) el.remove();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STATUS
+═══════════════════════════════════════════════════════════════ */
+function zgSetThinking(on) {
+  const dot = document.getElementById('zgOnlineDot');
+  const txt = document.getElementById('zgStatusTxt');
+  dot.className = 'zgAvOnline' + (on ? ' zgThinking' : '');
+  txt.textContent = on ? 'Zubeen da is thinking...' : 'The Voice of Assam — Always with you 🙏';
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SEND MESSAGE
+═══════════════════════════════════════════════════════════════ */
+async function zgSend() {
+  const inp  = document.getElementById('zgIn');
+  const text = inp.value.trim();
+  if (!text || zgBusy) return;
+
+  // Hide suggestions after first real message
+  document.getElementById('zgSugg').style.display = 'none';
+
+  inp.value = ''; inp.style.height = 'auto';
+  document.getElementById('zgSendBtn').disabled = true;
+  zgAddMsg('user', text);
+
+  // Add to Gemini history (user turn)
+  zgHistory.push({ role: 'user', parts: [{ text }] });
+
+  zgBusy = true;
+  zgSetThinking(true);
+  zgShowTyping();
+
+  try {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${ZG_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: ZG_PROMPT + (ZG_DYNAMIC_CONTEXT ? '\n\n' + ZG_DYNAMIC_CONTEXT : '') }] },
+          contents: zgHistory,
+          generationConfig: { temperature: 0.85, maxOutputTokens: 380, topP: 0.93 },
+          safetySettings: [
+            { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_ONLY_HIGH' },
+            { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_ONLY_HIGH' }
+          ]
+        })
+      }
+    );
+
+    const data = await res.json();
+
+    if (data.error) {
+      // Surface the actual error for easier debugging
+      throw new Error(data.error.message || 'Gemini API error');
+    }
+
+    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim()
+      || 'Bandhu, the river paused for a moment… try again. 🙏';
+
+    zgHideTyping(); zgSetThinking(false);
+    zgAddMsg('bot', reply);
+
+    // Add model reply to history for multi-turn memory
+    zgHistory.push({ role: 'model', parts: [{ text: reply }] });
+
+    // Keep history manageable (last 16 turns = 8 exchanges)
+    if (zgHistory.length > 16) zgHistory = zgHistory.slice(-16);
+
+  } catch (err) {
+    zgHideTyping(); zgSetThinking(false);
+    const isKeyErr = err.message && (err.message.includes('API_KEY') || err.message.includes('key') || err.message.includes('API key'));
+    zgAddMsg('bot', isKeyErr
+      ? '🔑 Bandhu, the API key has not been configured yet. Please contact the zG Era team to activate the AI. Joi Axom 🙏'
+      : 'Something blocked the flow, bandhu — like a cloud over the Brahmaputra. Please try again in a moment. 🙏'
+    );
+    console.error('[ZG Bot Error]', err);
+  }
+
+  zgBusy = false;
+  document.getElementById('zgSendBtn').disabled = false;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CHIP CLICK
+═══════════════════════════════════════════════════════════════ */
+function zgChip(btn) {
+  const inp = document.getElementById('zgIn');
+  inp.value = btn.textContent.trim();
+  inp.style.height = 'auto';
+  document.getElementById('zgSendBtn').disabled = false;
+  zgSend();
+}
+
+/* Show a subtle pulse on the badge after 7s to draw attention */
+setTimeout(() => {
+  const btn = document.getElementById('zgBtn');
+  if (btn && !zgIsOpen) btn.style.animation = 'zgPulse 1.2s ease-in-out infinite';
+}, 7000);
+
+// Load all context files silently on page load
+zgLoadContext();
+</script>
+
+</body>
+</html>
